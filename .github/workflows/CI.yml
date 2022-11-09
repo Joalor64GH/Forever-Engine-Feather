@@ -31,8 +31,8 @@ jobs:
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
-          haxelib git SScript https://github.com/AltronMaxX/SScript
           haxelib git polymod https://github.com/MasterEric/polymod
+          haxelib git SScript https://github.com/AltronMaxX/SScript
 
       - name: Compile
         run: haxelib run lime build linux -release
@@ -65,8 +65,8 @@ jobs:
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
-          haxelib git SScript https://github.com/AltronMaxX/SScript
           haxelib git polymod https://github.com/MasterEric/polymod
+          haxelib git SScript https://github.com/AltronMaxX/SScript
         shell: cmd
 
       - name: Compile
@@ -100,8 +100,8 @@ jobs:
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
-          haxelib git SScript https://github.com/AltronMaxX/SScript
           haxelib git polymod https://github.com/MasterEric/polymod
+          haxelib git SScript https://github.com/AltronMaxX/SScript
 
       - name: Compile
         run: haxelib run lime build mac -release
