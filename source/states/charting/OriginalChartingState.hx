@@ -1003,7 +1003,7 @@ class OriginalChartingState extends MusicBeatState
 				{
 					if ((playTicksBf.checked) && (note.mustPress) || (playTicksDad.checked) && (!note.mustPress))
 					{
-						FlxG.sound.play(Paths.sound('soundNoteTick'));
+						FlxG.sound.play(Paths.sound('base/menus/chart/soundNoteTick'));
 						playedSound[data] = true;
 					}
 				}

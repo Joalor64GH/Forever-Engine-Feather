@@ -316,7 +316,7 @@ class FreeplayMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(Paths.sound('base/menus/scrollMenu'), 0.4);
 
 		curSelected += change;
 

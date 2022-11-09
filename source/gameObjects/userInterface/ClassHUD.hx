@@ -238,22 +238,22 @@ class ClassHUD extends FlxSpriteGroup
 	public function colorHighlight(judge:String, perfectSick:Bool)
 	{
 		// highlights the accuracy mark on the score bar;
-
-		var judgeMap:Map<String, FlxColor> = [
-			'sick' => FlxColor.CYAN,
-			'good' => FlxColor.LIME,
-			'bad' => FlxColor.ORANGE,
-			'shit' => FlxColor.PURPLE,
-			'miss' => FlxColor.RED,
+		var ratingMap:Map<String, FlxColor> = [
+			"S+" => FlxColor.fromString('#F8D482'),
+			"S" => FlxColor.CYAN,
+			"A" => FlxColor.LIME,
+			"B" => FlxColor.GREEN,
+			"C" => FlxColor.BROWN,
+			"D" => FlxColor.PINK,
+			"E" => FlxColor.ORANGE,
+			"F" => FlxColor.RED,
 		];
 
 		var color:FlxColor = FlxColor.WHITE;
-		for (judgeName => judgeColor in judgeMap)
+		for (scoreRating => ratingColor in ratingMap)
 		{
-			if (judge == 'sick' && perfectSick)
-				judgeColor = FlxColor.fromString('#F8D482'); // golden sicks;
-			if (judgeName == judge)
-				color = judgeColor;
+			if (scoreRating == Timings.returnScoreRating())
+				color = ratingColor;
 		}
 
 		scoreFlashFormat = new FlxTextFormat(color, true);

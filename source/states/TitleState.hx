@@ -250,7 +250,7 @@ class TitleState extends MusicBeatState
 				if (!Init.trueSettings.get('Disable Flashing Lights'))
 					FlxG.camera.flash(FlxColor.WHITE, 1);
 
-				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+				FlxG.sound.play(Paths.sound('base/menus/confirmMenu'), 0.7);
 
 				transitioning = true;
 				if (logoTween != null)

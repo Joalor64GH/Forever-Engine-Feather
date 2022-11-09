@@ -181,7 +181,7 @@ class OptionsSubstate extends MusicBeatSubState
 	private function updateSelection(equal:Int = 0)
 	{
 		if (equal != curSelection)
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 		var prevSelection:Int = curSelection;
 		curSelection = equal;
 		// wrap the current selection
@@ -232,7 +232,7 @@ class OptionsSubstate extends MusicBeatSubState
 						curHorizontalSelection = 0;
 
 					// update stuffs
-					FlxG.sound.play(Paths.sound('scrollMenu'));
+					FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 				}
 			}
 
@@ -282,7 +282,7 @@ class OptionsSubstate extends MusicBeatSubState
 
 			if (controls.ACCEPT)
 			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
+				FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 				submenuOpen = true;
 
 				FlxFlicker.flicker(otherKeys.members[(curSelection * 2) + curHorizontalSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)

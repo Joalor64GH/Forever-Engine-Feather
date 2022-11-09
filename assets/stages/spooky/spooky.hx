@@ -7,7 +7,7 @@ function updateStage(curBeat:Int, boyfriend:Character, gf:Character, dad:Charact
 	{
 		lightningStrikeBeat = curBeat;
 
-		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+		FlxG.sound.play(Paths.soundRandom('events/week2/thunder', 1, 2));
 
 		if (!Init.trueSettings.get('Disable Flashing Lights'))
 			getObject("hallowBack").playAnim('lightning');

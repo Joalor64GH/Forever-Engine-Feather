@@ -193,7 +193,7 @@ class Init extends FlxState
 		'Accuracy Hightlight' => [
 			true,
 			Checkmark,
-			"Whether to have a color hightlight based on your last Judgement when hitting a note.",
+			"Whether to have a color hightlight based on your ranking when hitting a note.",
 			NOT_FORCED
 		],
 		'Ghost Tapping' => [

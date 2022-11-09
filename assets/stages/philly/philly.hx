@@ -32,7 +32,7 @@ function generateStage()
 	phillyTrain = new FNFSprite(2000, 360).loadGraphic(Paths.image('train', stageDir));
 	add(phillyTrain);
 
-	trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
+	trainSound = new FlxSound().loadEmbedded(Paths.sound('events/week3/train_passes'));
 	FlxG.sound.list.add(trainSound);
 
 	var street:FNFSprite = new FNFSprite(-40, streetBehind.y).loadGraphic(Paths.image('street', stageDir));
