@@ -31,6 +31,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git SScript https://github.com/TheWorldMachinima/SScript
+          haxelib git polymod https://github.com/MasterEric/polymod
 
       - name: Compile
         run: haxelib run lime build linux -release
@@ -63,6 +64,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git SScript https://github.com/TheWorldMachinima/SScript
+          haxelib git polymod https://github.com/MasterEric/polymod
         shell: cmd
 
       - name: Compile
@@ -96,6 +98,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git SScript https://github.com/TheWorldMachinima/SScript
+          haxelib git polymod https://github.com/MasterEric/polymod
 
       - name: Compile
         run: haxelib run lime build mac -release

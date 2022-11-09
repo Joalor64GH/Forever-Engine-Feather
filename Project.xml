@@ -31,6 +31,8 @@
 	<define name="DISCORD_RPC" if="desktop" unless="web || neko" />
 	<define name="VIDEO_PLUGIN" if="windows" unless="32bits || HXCPP_M32 || neko" />
 	<define name="SHOW_CONSOLE" if="debug" />
+	<define name="MODS_ALLOWED" if="desktop" />
+	<define name="MODCORE_ALLOWED" if="MODS_ALLOWED" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -44,6 +46,11 @@
 	<source path="source" />
 	<assets path="assets" />
 
+	<section if="MODS_ALLOWED">
+	        <assets path='art/mod.url' rename='How to make a mod.url' if="windows"/>
+	        <assets path='example_mods' rename='mods' embed='false'/>
+	</section>
+
 	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
@@ -56,6 +63,7 @@
 	<haxelib name="hxCodec" if="VIDEO_PLUGIN" />
 	<haxelib name="SScript" if="desktop" />
 	<haxelib name="hxcpp-debug-server" if="debug" />
+	<haxelib name="polymod" if="MODS_ALLOWED"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

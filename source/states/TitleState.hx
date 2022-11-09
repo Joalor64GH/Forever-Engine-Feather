@@ -29,6 +29,15 @@ import lime.app.Application;
 import openfl.Assets;
 import song.Conductor;
 import song.MusicBeat.MusicBeatState;
+#if MODS_ALLOWED
+import modding.ModList;
+import modding.PolymodHandler;
+import polymod.Polymod;
+import polymod.Polymod.Framework;
+import polymod.Polymod.PolymodError;
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 using StringTools;
 
@@ -55,6 +64,21 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		#if MODS_ALLOWED
+		if (sys.FileSystem.exists('mods/')) {
+			var folders:Array<String> = [];
+			for (file in sys.FileSystem.readDirectory('mods/')) {
+				var path = haxe.io.Path.join(['mods/', file]);
+				if (sys.FileSystem.isDirectory(path)) {
+					folders.push(file);
+				}
+			}
+			if(folders.length > 0) {
+				polymod.Polymod.init({modRoot: "mods", dirs: folders});
+			}
+		}
+		#end
+
 		controls.setKeyboardScheme(None, false);
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		super.create();
