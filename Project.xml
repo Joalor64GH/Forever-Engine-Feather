@@ -90,9 +90,9 @@
 	<!-- Use defines to configure the behavior of Polymod. -->
 	<section if="MODCORE_ALLOWED">
 		<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
-		<haxedef name="POLYMOD_MOD_PACK_FILE" value="modpack.txt" />
-		<haxedef name="POLYMOD_MOD_METADATA_FILE" value="modpackData.json" />
-		<haxedef name="POLYMOD_MOD_ICON_FILE"  value="modpackIcon.png" />
+		<haxedef name="POLYMOD_MOD_PACK_FILE" value="mod.txt" />
+		<haxedef name="POLYMOD_MOD_METADATA_FILE" value="modData.json" />
+		<haxedef name="POLYMOD_MOD_ICON_FILE"  value="modIcon.png" />
 		<haxedef name="POLYMOD_MOD_SOFTWARE_LICENSE" value="LICENSE.txt" />
 		<haxedef name="POLYMOD_DEBUG" if="debug" />
 	</section>
