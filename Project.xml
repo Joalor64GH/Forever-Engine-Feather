@@ -46,10 +46,7 @@
 	<source path="source" />
 	<assets path="assets" />
 
-	<section if="MODS_ALLOWED">
-	        <assets path='art/mod.url' rename='How to make a mod.url' if="windows"/>
-	        <assets path='example_mods' rename='mods' embed='false'/>
-	</section>
+	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
 
 	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
 
@@ -91,18 +88,14 @@
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 
 	<!-- Use defines to configure the behavior of Polymod. -->
-	<haxedef name="POLYMOD_SCRIPT_EXT" value=".hxs" />
-	<haxedef name="POLYMOD_SCRIPT_CLASS_EXT" value=".hxs" />
-	<haxedef name="POLYMOD_SCRIPT_LIBRARY" value="scripts" />
-	<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
-	<haxedef name="POLYMOD_ROOT_PATH" value="assets/scripts/" />
-	<haxedef name="POLYMOD_MOD_PACK_FILE" value="_polymod_pack.txt" />
-	<haxedef name="POLYMOD_MOD_METADATA_FILE" value="_polymod_meta.json" />
-	<haxedef name="POLYMOD_MOD_ICON_FILE"  value="_polymod_icon.png" />
-	<haxedef name="POLYMOD_MOD_SOFTWARE_LICENSE" value="LICENSE.txt" />
-	<haxedef name="POLYMOD_MOD_ASSET_LICENSE" value="ASSET_LICENSE.txt" />
-	<haxedef name="POLYMOD_MOD_CODE_LICENSE" value="CODE_LICENSE" />
-	<haxedef name="POLYMOD_DEBUG" if="debug" />
+	<section if="MODCORE_ALLOWED">
+		<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
+		<haxedef name="POLYMOD_MOD_PACK_FILE" value="modpack.txt" />
+		<haxedef name="POLYMOD_MOD_METADATA_FILE" value="modpackData.json" />
+		<haxedef name="POLYMOD_MOD_ICON_FILE"  value="modpackIcon.png" />
+		<haxedef name="POLYMOD_MOD_SOFTWARE_LICENSE" value="LICENSE.txt" />
+		<haxedef name="POLYMOD_DEBUG" if="debug" />
+	</section>
 
 	<!-- _________________________________ Custom _______________________________ -->
 
