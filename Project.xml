@@ -46,10 +46,7 @@
 	<source path="source" />
 	<assets path="assets" />
 
-	<section if="MODS_ALLOWED">
-	        <assets path='art/mod.url' rename='How to make a mod.url' if="windows"/>
-	        <assets path='example_mods' rename='mods' embed='false'/>
-	</section>
+	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED" />
 
 	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
 
