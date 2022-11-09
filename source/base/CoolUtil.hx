@@ -131,7 +131,7 @@ class CoolUtil
 		var path:String = Paths.getPath(file);
 
 		var absolutePath:String = Assets.getPath(path);
-		var directory:Array<String> = listFilesPathsInPath(absolutePath); //I don't know if this will work as well as it should. @AltronMaxX
+		var directory:Array<String> = listFilesInPath(absolutePath, null, ''); //I don't know if this will work as well as it should. @AltronMaxX
 
 		if (directory != null)
 		{
