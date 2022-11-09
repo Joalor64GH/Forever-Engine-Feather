@@ -27,6 +27,7 @@ echo Installing Haxeflixel...
 haxelib install lime
 haxelib install openfl
 haxelib install flixel
+haxelib install haxe-strings
 haxelib run lime setup flixel
 haxelib run lime setup
 haxelib install flixel-tools

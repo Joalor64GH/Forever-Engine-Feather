@@ -27,6 +27,7 @@ jobs:
           haxelib install flixel
           haxelib install flixel-ui
           haxelib install flixel-addons
+          haxelib install haxe-strings
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
@@ -60,6 +61,7 @@ jobs:
           haxelib install flixel
           haxelib install flixel-ui
           haxelib install flixel-addons
+          haxelib install haxe-strings
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
@@ -94,6 +96,7 @@ jobs:
           haxelib install flixel
           haxelib install flixel-ui
           haxelib install flixel-addons
+          haxelib install haxe-strings
           haxelib install hscript
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
