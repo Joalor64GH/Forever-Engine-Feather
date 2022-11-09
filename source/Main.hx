@@ -127,8 +127,8 @@ class Main extends Sprite
 	{
 		var rawJson:String = null;
 
-		if (FileSystem.exists(path))
-			rawJson = File.getContent(path);
+		if (openfl.Assets.exists(path))
+			rawJson = openfl.Assets.getText(path);
 
 		return Json.parse(rawJson);
 	}
@@ -268,7 +268,7 @@ class Main extends Sprite
 
 		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/BeastlyGhost/Forever-Engine-Feather";
 
-		if (!FileSystem.exists("crash/"))
+		if (!openfl.Assets.exists("crash/"))
 			FileSystem.createDirectory("crash/");
 
 		File.saveContent(path, errMsg + "\n");
@@ -282,7 +282,7 @@ class Main extends Sprite
 		crashDialoguePath += ".exe";
 		#end
 
-		if (FileSystem.exists(crashDialoguePath))
+		if (openfl.Assets.exists(crashDialoguePath))
 		{
 			Sys.println("Found crash dialog: " + crashDialoguePath);
 			new Process(crashDialoguePath, [path]);

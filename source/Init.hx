@@ -11,6 +11,14 @@ import openfl.filters.ColorMatrixFilter;
 import playerData.*;
 import states.*;
 import states.charting.*;
+#if MODS_ALLOWED
+import modding.ModList;
+import modding.PolymodHandler;
+import polymod.Polymod;
+import polymod.Polymod.Framework;
+import polymod.Polymod.PolymodError;
+import openfl.Assets;
+#end
 
 using StringTools;
 
@@ -297,6 +305,21 @@ class Init extends FlxState
 		FlxG.mouse.useSystemCursor = true; // Use system cursor because it's prettier
 		FlxG.mouse.visible = false; // Hide mouse on start
 		FlxGraphic.defaultPersist = true; // make sure we control all of the memory
+
+		#if MODS_ALLOWED
+		if (openfl.Assets.exists('mods/')) {
+			var folders:Array<String> = [];
+			for (file in sys.FileSystem.readDirectory('mods/')) {
+				var path = haxe.io.Path.join(['mods/', file]);
+				if (sys.FileSystem.isDirectory(path)) {
+					folders.push(file);
+				}
+			}
+			if(folders.length > 0) {
+				polymod.Polymod.init({modRoot: "mods", dirs: folders});
+			}
+		}
+		#end
 
 		gotoTitleScreen();
 	}

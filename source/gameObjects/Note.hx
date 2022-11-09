@@ -336,7 +336,7 @@ class Note extends FNFSprite
 		{
 			var module:String = Paths.module('$noteType', 'notetypes/$noteType');
 
-			if (sys.FileSystem.exists(module))
+			if (openfl.Assets.exists(module))
 				noteScript = new ScriptHandler(module);
 
 			if (noteScript != null)

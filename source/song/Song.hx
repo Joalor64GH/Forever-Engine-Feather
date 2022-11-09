@@ -88,7 +88,7 @@ class Song
 	{
 		return try
 		{
-			data = File.getContent(Paths.songJson(path.toLowerCase(), secondPath.toLowerCase())).trim();
+			data = openfl.Assets.getText(Paths.songJson(path.toLowerCase(), secondPath.toLowerCase())).trim();
 		}
 		catch (e)
 		{

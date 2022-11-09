@@ -102,7 +102,7 @@ class Character extends FNFSprite
 		if (animation.getByName('danceRight') != null)
 			danceIdle = true;
 
-		if (FileSystem.exists(Paths.characterModule(character, character, PSYCH_ENGINE)))
+		if (openfl.Assets.exists(Paths.characterModule(character, character, PSYCH_ENGINE)))
 			characterType = PSYCH_ENGINE;
 
 		switch (curCharacter)
@@ -404,7 +404,7 @@ class Character extends FNFSprite
 			var textAsset:String = Paths.characterModule(char, char + '.txt');
 
 			// check if a text file exists with the character name exists, if so, it's a spirit-like character;
-			if (FileSystem.exists(textAsset))
+			if (openfl.Assets.exists(textAsset))
 				spriteType = "PackerAtlas";
 			else
 				spriteType = "SparrowAtlas";
@@ -569,8 +569,8 @@ class Character extends FNFSprite
 		var rawJson:String = null;
 		var json:PsychEngineChar = null;
 
-		if (FileSystem.exists(Paths.characterModule(char, char, PSYCH_ENGINE)))
-			rawJson = File.getContent(Paths.characterModule(char, char, PSYCH_ENGINE));
+		if (openfl.Assets.exists(Paths.characterModule(char, char, PSYCH_ENGINE)))
+			rawJson = openfl.Assets.getText(Paths.characterModule(char, char, PSYCH_ENGINE));
 
 		if (rawJson != null)
 			json = cast Json.parse(rawJson);
@@ -581,7 +581,7 @@ class Character extends FNFSprite
 		{
 			var textAsset:String = Paths.characterModule(char, json.image.replace('characters/', '') + '.txt');
 
-			if (FileSystem.exists(textAsset))
+			if (openfl.Assets.exists(textAsset))
 				spriteType = "PackerAtlas";
 			else
 				spriteType = "SparrowAtlas";

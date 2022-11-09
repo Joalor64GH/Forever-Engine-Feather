@@ -122,7 +122,7 @@ class Paths
 	public static function returnGraphic(key:String, ?folder:String, ?library:String, ?textureCompression:Bool = false)
 	{
 		var path = getPath(folder.length > 1 ? '$folder/$key.png' : '$key.png', IMAGE, library);
-		if (FileSystem.exists(path))
+		if (openfl.Assets.exists(path))
 		{
 			if (!currentTrackedAssets.exists(key))
 			{
@@ -153,15 +153,15 @@ class Paths
 
 	public static function getTextFile(key:String, type:AssetType = TEXT, ?library:Null<String>):String
 	{
-		if (FileSystem.exists(getPath(key, type, library)))
-			return File.getContent(getPath(key, type, library));
+		if (openfl.Assets.exists(getPath(key, type, library)))
+			return openfl.Assets.getText(getPath(key, type, library));
 
 		if (currentLevel != null)
 		{
 			var levelPath:String = '';
 			levelPath = getLibraryPathForce(key, '');
-			if (FileSystem.exists(levelPath))
-				return File.getContent(levelPath);
+			if (openfl.Assets.exists(levelPath))
+				return openfl.Assets.getText(levelPath);
 		}
 		return Assets.getText(getPath(key, type, library));
 	}
@@ -225,7 +225,7 @@ class Paths
 	inline static function getPreloadPath(file:String)
 	{
 		var returnPath:String = 'assets/$file';
-		if (!FileSystem.exists(returnPath))
+		if (!openfl.Assets.exists(returnPath))
 			returnPath = CoolUtil.swapSpaceDash(returnPath);
 		return returnPath;
 	}
@@ -303,7 +303,7 @@ class Paths
 	inline static public function getSparrowAtlas(key:String, folder:String = 'images', ?library:String)
 	{
 		var graphic:FlxGraphic = returnGraphic(key, folder, library);
-		return (FlxAtlasFrames.fromSparrow(graphic, File.getContent(file('$folder/$key.xml', library))));
+		return (FlxAtlasFrames.fromSparrow(graphic, openfl.Assets.getText(file('$folder/$key.xml', library))));
 	}
 
 	inline static public function getPackerAtlas(key:String, folder:String = 'images', ?library:String)
@@ -317,7 +317,7 @@ class Paths
 
 		for (j in scriptExts)
 		{
-			if (FileSystem.exists(getPath('$folder/$key.$j', TEXT, library)))
+			if (openfl.Assets.exists(getPath('$folder/$key.$j', TEXT, library)))
 				extension = '.$j';
 			else
 				extension = '.hx';
@@ -343,7 +343,7 @@ class Paths
 				// this is diabolic;
 				for (j in scriptExts)
 				{
-					if (FileSystem.exists(getPath('characters/$folder/$character.$j', TEXT, library)))
+					if (openfl.Assets.exists(getPath('characters/$folder/$character.$j', TEXT, library)))
 						extension = '.$j';
 					else
 						extension = '.hx';

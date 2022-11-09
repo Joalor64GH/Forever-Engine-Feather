@@ -41,9 +41,9 @@ class MenuCharacter extends FNFSprite
 		var rawJson = null;
 		var path:String = Paths.getPath('images/menus/base/storymenu/characters/' + newCharacter + '.json');
 
-		if (!FileSystem.exists(path))
+		if (!openfl.Assets.exists(path))
 			path = Paths.getPath('images/menus/base/storymenu/characters/none.json');
-		rawJson = File.getContent(path);
+		rawJson = openfl.Assets.getText(path);
 
 		storyChar = cast Json.parse(rawJson);
 

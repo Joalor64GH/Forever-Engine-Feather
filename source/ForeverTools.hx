@@ -48,10 +48,10 @@ class ForeverTools
 		var defaultAssetModifier:String = 'base';
 
 		var realAsset = '$baseLibrary/$changeableSkin/$assetModifier/$asset';
-		if (!FileSystem.exists('$baseFolder/$realAsset.png'))
+		if (!openfl.Assets.exists('$baseFolder/$realAsset.png'))
 		{
 			realAsset = '$baseLibrary/$defaultChangeable/$assetModifier/$asset';
-			if (!FileSystem.exists('$baseFolder/$realAsset.png'))
+			if (!openfl.Assets.exists('$baseFolder/$realAsset.png'))
 				realAsset = '$baseLibrary/$defaultChangeable/$defaultAssetModifier/$asset';
 		}
 
