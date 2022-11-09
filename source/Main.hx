@@ -57,7 +57,7 @@ class Main extends Sprite
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 
-	public static var mainClassState:Class<FlxState> = Init; // Determine the main class state of the game
+	public static var mainClassState:Class<FlxState> = states.TitleState; // Determine the main class state of the game
 	public static var framerate:Int = 120; // How many frames per second the game should run at.
 
 	public static var gameVersion:String = '0.3.1';
@@ -178,7 +178,7 @@ class Main extends Sprite
 
 		// here we set up the base game
 		var gameCreate:FlxGame;
-		gameCreate = new FlxGame(gameWidth, gameHeight, mainClassState, zoom, framerate, framerate, skipSplash);
+		gameCreate = new FlxGame(gameWidth, gameHeight, Init, zoom, framerate, framerate, skipSplash);
 		addChild(gameCreate); // and create it afterwards
 
 		// begin the discord rich presence
