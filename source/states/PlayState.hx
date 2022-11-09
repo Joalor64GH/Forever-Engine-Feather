@@ -356,6 +356,7 @@ class PlayState extends MusicBeatState
 		// initialize ui elements
 		startingSong = true;
 		startedCountdown = true;
+		canPause = false;
 
 		//
 		var downscroll = Init.trueSettings.get('Downscroll');
@@ -427,7 +428,7 @@ class PlayState extends MusicBeatState
 		Paths.clearUnusedMemory();
 
 		// call the funny intro cutscene depending on the song
-		introCutscene();
+		songCutscene(false);
 
 		callFunc('postCreate', []);
 	}
@@ -585,7 +586,7 @@ class PlayState extends MusicBeatState
 			// the change I made was just so that it would only take accept inputs
 			if (controls.ACCEPT && dialogueBox.textStarted)
 			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(Paths.sound('$assetModifier/menus/cancelMenu'));
 				dialogueBox.curPage += 1;
 
 				if (dialogueBox.curPage == dialogueBox.dialogueData.dialogue.length)
@@ -744,7 +745,7 @@ class PlayState extends MusicBeatState
 
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-			FlxG.sound.play(Paths.sound(GameOverSubstate.deathNoise));
+			FlxG.sound.play(Paths.sound('$assetModifier/' + GameOverSubstate.deathNoise));
 
 			#if DISCORD_RPC
 			Discord.changePresence("GAME OVER - " + songDetails, detailsSub, iconRPC);
@@ -1050,7 +1051,7 @@ class PlayState extends MusicBeatState
 		{
 			var stringDirection:String = Receptor.actions[direction];
 
-			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			FlxG.sound.play(Paths.soundRandom('$assetModifier/miss', 1, 3), FlxG.random.float(0.1, 0.2));
 
 			for (character in strumline.characters)
 			{
@@ -1254,7 +1255,7 @@ class PlayState extends MusicBeatState
 	function decreaseCombo(?popMiss:Bool = false)
 	{
 		// painful if statement
-		if (((Timings.combo > 5) || (Timings.combo < 0)) && (gf.animOffsets.exists('sad')))
+		if (Timings.combo > 5 && gf.animOffsets.exists('sad'))
 			gf.playAnim('sad');
 
 		if (Timings.combo > 0)
@@ -1423,11 +1424,12 @@ class PlayState extends MusicBeatState
 	function startSong():Void
 	{
 		startingSong = false;
+		canPause = true;
 
 		if (!paused)
 		{
 			songMusic.play();
-			songMusic.onComplete = endSong;
+			songMusic.onComplete = endSong.bind();
 			vocals.play();
 
 			resyncVocals();
@@ -1762,63 +1764,63 @@ class PlayState extends MusicBeatState
 				FlxG.save.flush();
 			}
 			else
-				songEndSpecificActions();
+				songCutscene(true);
 		}
 		//
 	}
 
-	private function songEndSpecificActions()
-	{
-		switch (SONG.song.toLowerCase())
-		{
-			case 'eggnog':
-				// make the lights go out
-				var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
-					-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-				blackShit.scrollFactor.set();
-				add(blackShit);
-				camHUD.visible = false;
-
-				// oooo spooky
-				FlxG.sound.play(Paths.sound('Lights_Shut_off'));
-
-				// call the song end
-				var eggnogEndTimer:FlxTimer = new FlxTimer().start(Conductor.crochet / 1000, function(timer:FlxTimer)
-				{
-					callDefaultSongEnd();
-				}, 1);
-
-			default:
-				callDefaultSongEnd();
-		}
-	}
-
 	private function callDefaultSongEnd()
 	{
-		var difficulty:String = '-' + CoolUtil.difficultyFromNumber(storyDifficulty).toLowerCase();
-		difficulty = difficulty.replace('-normal', '');
+		if (isStoryMode)
+		{
+			var difficulty:String = '-' + CoolUtil.difficultyFromNumber(storyDifficulty).toLowerCase();
+			difficulty = difficulty.replace('-normal', '');
 
-		FlxTransitionableState.skipNextTransIn = true;
-		FlxTransitionableState.skipNextTransOut = true;
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
 
-		PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
-		ForeverTools.killMusic([songMusic, vocals]);
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+			ForeverTools.killMusic([songMusic, vocals]);
 
-		// deliberately did not use the main.switchstate as to not unload the assets
-		FlxG.switchState(new PlayState());
+			// deliberately did not use the main.switchstate as to not unload the assets
+			FlxG.switchState(new PlayState());
+		}
+		else
+			Main.switchState(this, new FreeplayMenu());
 	}
 
 	var dialogueBox:DialogueBox;
 
-	public function introCutscene()
+	public function songCutscene(onEnd:Bool = false)
 	{
 		if (skipCutscenes())
-			return startCountdown();
+			return onEnd ? endSong() : startCountdown();
 
 		switch (SONG.song.toLowerCase())
 		{
+			case 'eggnog':
+				if (onEnd)
+				{
+					// make the lights go out
+					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+					blackShit.scrollFactor.set();
+					add(blackShit);
+					camHUD.visible = false;
+
+					// oooo spooky
+					FlxG.sound.play(Paths.sound('events/week5/Lights_Shut_off'));
+
+					// call the song end
+					var eggnogEndTimer:FlxTimer = new FlxTimer().start(Conductor.crochet / 1000, function(timer:FlxTimer)
+					{
+						callDefaultSongEnd();
+					}, 1);
+				}
+
 			case "winter-horrorland":
 				inCutscene = true;
+				canPause = false;
 				var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
 				add(blackScreen);
 				blackScreen.scrollFactor.set();
@@ -1827,7 +1829,7 @@ class PlayState extends MusicBeatState
 				new FlxTimer().start(0.1, function(tmr:FlxTimer)
 				{
 					remove(blackScreen);
-					FlxG.sound.play(Paths.sound('Lights_Turn_On'));
+					FlxG.sound.play(Paths.sound('events/week5/Lights_Turn_On'));
 					camFollow.y = -2050;
 					camFollow.x += 200;
 					FlxG.camera.focusOn(camFollow.getPosition());
@@ -1848,10 +1850,11 @@ class PlayState extends MusicBeatState
 				});
 			case 'roses':
 				// the same just play angery noise LOL
-				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
+				FlxG.sound.play(Paths.sound('events/week6/ANGRY_TEXT_BOX'));
 				callTextbox();
 			case 'thorns':
 				inCutscene = true;
+				canPause = false;
 				for (hud in allUIs)
 					hud.visible = false;
 
@@ -1877,7 +1880,7 @@ class PlayState extends MusicBeatState
 					else
 					{
 						senpaiEvil.animation.play('idle');
-						FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+						FlxG.sound.play(Paths.sound('events/week6/Senpai_Dies'), 1, false, null, true, function()
 						{
 							remove(senpaiEvil);
 							remove(red);
@@ -1895,7 +1898,10 @@ class PlayState extends MusicBeatState
 					}
 				});
 			default:
-				callTextbox();
+				if (onEnd)
+					callDefaultSongEnd();
+				else
+					callTextbox();
 		}
 		//
 	}
@@ -1905,11 +1911,13 @@ class PlayState extends MusicBeatState
 		var dialogPath = Paths.json(SONG.song.toLowerCase() + '/dialogue');
 		if (openfl.Assets.exists(dialogPath))
 		{
-			startedCountdown = false;
+			inCutscene = true;
+			if (!endingSong)
+				startedCountdown = false;
 
 			dialogueBox = DialogueBox.createDialogue(openfl.Assets.getText(dialogPath));
 			dialogueBox.cameras = [dialogueHUD];
-			dialogueBox.whenDaFinish = startCountdown;
+			dialogueBox.whenDaFinish = endingSong ? endSong : startCountdown;
 
 			add(dialogueBox);
 		}
@@ -1998,7 +2006,7 @@ class PlayState extends MusicBeatState
 								prepare.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('intro3-' + assetModifier), 0.6);
+						FlxG.sound.play(Paths.sound('$assetModifier/intro3'), 0.6);
 						Conductor.songPosition = -(Conductor.crochet * 4);
 					case 1:
 						var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
@@ -2017,7 +2025,7 @@ class PlayState extends MusicBeatState
 								ready.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('intro2-' + assetModifier), 0.6);
+						FlxG.sound.play(Paths.sound('$assetModifier/intro2'), 0.6);
 
 						Conductor.songPosition = -(Conductor.crochet * 3);
 					case 2:
@@ -2036,7 +2044,7 @@ class PlayState extends MusicBeatState
 								set.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('intro1-' + assetModifier), 0.6);
+						FlxG.sound.play(Paths.sound('$assetModifier/intro1'), 0.6);
 
 						Conductor.songPosition = -(Conductor.crochet * 2);
 					case 3:
@@ -2057,7 +2065,7 @@ class PlayState extends MusicBeatState
 								go.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('introGo-' + assetModifier), 0.6);
+						FlxG.sound.play(Paths.sound('$assetModifier/introGo'), 0.6);
 
 						Conductor.songPosition = -(Conductor.crochet * 1);
 				}

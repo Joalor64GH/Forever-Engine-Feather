@@ -2,6 +2,7 @@ package base.feather;
 
 import base.feather.ScriptHandler;
 import song.SongFormat.TimedEvent;
+import base.CoolUtil;
 
 using StringTools;
 
@@ -21,7 +22,7 @@ class Events
 
 		var myEvents:Array<String> = [];
 
-		for (event in sys.FileSystem.readDirectory('assets/events'))
+		for (event in CoolUtil.listFilesPathsInPath('assets/events'))
 		{
 			if (event.contains('.'))
 			{

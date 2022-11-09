@@ -13,7 +13,7 @@ import states.*;
 import states.charting.*;
 #if MODS_ALLOWED
 import modding.ModList;
-import modding.PolymodHandler;
+import modding.ModCore;
 import polymod.Polymod;
 import polymod.Polymod.Framework;
 import polymod.Polymod.PolymodError;
@@ -193,7 +193,7 @@ class Init extends FlxState
 		'Accuracy Hightlight' => [
 			true,
 			Checkmark,
-			"Whether to have a color hightlight based on your last Judgement when hitting a note.",
+			"Whether to have a color hightlight based on your ranking when hitting a note.",
 			NOT_FORCED
 		],
 		'Ghost Tapping' => [
@@ -311,16 +311,9 @@ class Init extends FlxState
 
 		#if MODS_ALLOWED
 		if (openfl.Assets.exists('mods/')) {
-			var folders:Array<String> = [];
-			for (file in sys.FileSystem.readDirectory('mods/')) {
-				var path = haxe.io.Path.join(['mods/', file]);
-				if (sys.FileSystem.isDirectory(path)) {
-					folders.push(file);
-				}
-			}
-			if(folders.length > 0) {
-				polymod.Polymod.init({modRoot: "mods", dirs: folders});
-			}
+			var modList = ModCore.getAllModIds();
+			if (modList.length > 0)
+				ModCore.loadModsById(modList);
 		}
 		#end
 

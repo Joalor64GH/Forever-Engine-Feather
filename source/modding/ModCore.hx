@@ -2,11 +2,11 @@ package modding;
 
 import flixel.FlxG;
 import polymod.*;
-import polymod.Polymod;
 import polymod.Polymod.ModMetadata;
 import polymod.Polymod.PolymodError;
+import polymod.Polymod;
 import polymod.format.ParseRules;
-#if MODCORE_ALLOWED
+#if MODS_ALLOWED
 import polymod.backends.OpenFLBackend;
 import polymod.backends.PolymodAssets.PolymodAssetType;
 import polymod.format.ParseRules.LinesParseFormat;
@@ -30,7 +30,7 @@ class ModCore
 	static final MOD_DIRECTORY:String = "mods";
 
 	private static final modExtensions:Map<String, PolymodAssetType> = [
-		'ogg' => SOUND,
+		'ogg' => AUDIO_SOUND,
         'png' => IMAGE,
         'xml' => TEXT,
         'json' => TEXT,
@@ -45,23 +45,23 @@ class ModCore
 
 	public static function loadAllMods()
 	{
-		#if MODCORE_ALLOWED
-		Debug.logInfo("Initializing ModCore (using all mods)...");
+		#if MODS_ALLOWED
+		trace("[INFO] Initializing ModCore (using all mods)...");
 		loadModsById(getAllModIds());
 		#else
-		Debug.logInfo("ModCore not initialized; not supported on this platform.");
+		trace("[INFO] ModCore not initialized; not supported on this platform.");
 		#end
 	}
 
 	public static function loadConfiguredMods()
 	{
-		#if MODCORE_ALLOWED
-		Debug.logInfo("Initializing ModCore (using user config)...");
-		Debug.logTrace('  User mod config: ${FlxG.save.data.modConfig}');
+		#if MODS_ALLOWED
+		trace("[INFO] Initializing ModCore (using user config)...");
+		trace('  User mod config: ${FlxG.save.data.modConfig}');
 		var userModConfig = getConfiguredMods();
 		loadModsById(userModConfig);
 		#else
-		Debug.logInfo("ModCore not initialized; not supported on this platform.");
+		trace("[INFO] ModCore not initialized; not supported on this platform.");
 		#end
 	}
 
@@ -88,37 +88,37 @@ class ModCore
 
 	public static function saveModList(loadedMods:Array<String>)
 	{
-		Debug.logInfo('Saving mod configuration...');
+		trace('[INFO] Saving mod configuration...');
 		var rawSaveData = loadedMods.join('~');
-		Debug.logTrace(rawSaveData);
+		trace(rawSaveData);
 		FlxG.save.data.modConfig = rawSaveData;
 		var result = FlxG.save.flush();
 		if (result)
-			Debug.logInfo('Mod configuration saved successfully.');
+			trace('[INFO] Mod configuration saved successfully.');
 		else
-			Debug.logWarn('Failed to save mod configuration.');
+			trace('[WARN] Failed to save mod configuration.');
 	}
 
 	public static function loadModsById(ids:Array<String>)
 	{
-		#if MODCORE_ALLOWED
+		#if MODS_ALLOWED
 		var modsToLoad:Array<String> = [];
 			
         if (ids.length == 0)
         {
-	            Debug.logWarn('You attempted to load zero mods.');
+	        trace('[WARN] You attempted to load zero mods.');
         }
         else
         {
-	            if (ids[0] != '' && ids != null)
-	            {
-		                Debug.logInfo('Attempting to load ${ids.length} mods...');
-		                modsToLoad = ids;
-	            }
-	            else
-	            {
-		                modsToLoad = [];
-	            }
+	        if (ids[0] != '' && ids != null)
+	        {
+				trace('[INFO] Attempting to load ${ids.length} mods...');
+		        modsToLoad = ids;
+	        }
+	        else
+	        {
+		        modsToLoad = [];
+	        }
         }
 
 		var loadedModList = polymod.Polymod.init({
@@ -128,11 +128,6 @@ class ModCore
 			apiVersion: API_VERSION,
 			errorCallback: onPolymodError,
 			extensionMap: modExtensions,
-			frameworkParams: buildFrameworkParams(),
-			customBackend: ModCoreBackend,
-			ignoredFiles: Polymod.getDefaultIgnoreList()
-			parseRules: buildParseRules(),
-
 			frameworkParams: buildFrameworkParams(),
 
 			// Use a custom backend so we can get a picture of what's going on,
@@ -148,44 +143,44 @@ class ModCore
 
 		if (loadedModList == null)
 		{
-			Debug.logError('Mod loading failed, check above for a message from Polymod explaining why.');
+			trace('[ERROR] Mod loading failed, check above for a message from Polymod explaining why.');
 		}
 		else
 		{
 			if (loadedModList.length == 0)
 			{
-				Debug.logInfo('Mod loading complete. We loaded no mods / ${ids.length} mods.');
+				trace('[INFO] Mod loading complete. We loaded no mods / ${ids.length} mods.');
 			}
 			else
 			{
-				Debug.logInfo('Mod loading complete. We loaded ${loadedModList.length} / ${ids.length} mods.');
+				trace('[INFO] Mod loading complete. We loaded ${loadedModList.length} / ${ids.length} mods.');
 			}
 		}
 
 		for (mod in loadedModList)
-			Debug.logTrace('  * ${mod.title} v${mod.modVersion} [${mod.id}]');
+			trace('  * ${mod.title} v${mod.modVersion} [${mod.id}]');
 
 		var fileList = Polymod.listModFiles("IMAGE");
-		Debug.logInfo('Installed mods have replaced ${fileList.length} images.');
+		trace('[INFO] Installed mods have replaced ${fileList.length} images.');
 		for (item in fileList)
-			Debug.logTrace('  * $item');
+			trace('  * $item');
 
 		fileList = Polymod.listModFiles("TEXT");
-		Debug.logInfo('Installed mods have replaced ${fileList.length} text files.');
+		trace('[INFO] Installed mods have replaced ${fileList.length} text files.');
 		for (item in fileList)
-			Debug.logTrace('  * $item');
+			trace('  * $item');
 
 		fileList = Polymod.listModFiles("MUSIC");
-		Debug.logInfo('Installed mods have replaced ${fileList.length} music files.');
+		trace('[INFO] Installed mods have replaced ${fileList.length} music files.');
 		for (item in fileList)
-			Debug.logTrace('  * $item');
+			trace('  * $item');
 
 		fileList = Polymod.listModFiles("SOUND");
-		Debug.logInfo('Installed mods have replaced ${fileList.length} sound files.');
+		trace('[INFO] Installed mods have replaced ${fileList.length} sound files.');
 		for (item in fileList)
-			Debug.logTrace('  * $item');
+			trace('  * $item');
 		#else
-		Debug.logWarn("Attempted to load mods when Polymod was not supported!");
+		trace("[WARN] Attempted to load mods when Polymod was not supported!");
 		#end
 	}
 
@@ -196,7 +191,7 @@ class ModCore
 	 */
 	public static function hasMods():Bool
 	{
-		#if MODCORE_ALLOWED
+		#if MODS_ALLOWED
 		return getAllMods().length > 0;
 		#else
 		return false;
@@ -205,9 +200,9 @@ class ModCore
 
 	public static function getAllMods():Array<ModMetadata>
 	{
-		Debug.logInfo('Scanning the mods folder...');
+		trace('[INFO] Scanning the mods folder...');
 		var modMetadata = Polymod.scan(MOD_DIRECTORY);
-		Debug.logInfo('Found ${modMetadata.length} mods when scanning.');
+		trace('[INFO] Found ${modMetadata.length} mods when scanning.');
 		return modMetadata;
 	}
 
@@ -217,7 +212,7 @@ class ModCore
 		return modIds;
 	}
 
-	#if MODCORE_ALLOWED
+	#if MODS_ALLOWED
 	static function buildParseRules():polymod.format.ParseRules
 	{
 		var output = polymod.format.ParseRules.getDefault();
@@ -264,12 +259,12 @@ class ModCore
 		switch (error.code)
 		{
 			case MOD_LOAD_PREPARE:
-				Debug.logInfo(error.message, null);
+				trace('[INFO] ' + error.message, null);
 			case MOD_LOAD_DONE:
-				Debug.logInfo(error.message, null);
+				trace('[INFO] ' +  error.message, null);
 			// case MOD_LOAD_FAILED:
 			case MISSING_ICON:
-				Debug.logWarn('A mod is missing an icon, will just skip it but please add one: ${error.message}', null);
+				trace('[WARN] A mod is missing an icon, will just skip it but please add one: ${error.message}', null);
 			// case "parse_mod_version":
 			// case "parse_api_version":
 			// case "parse_mod_api_version":
@@ -291,53 +286,53 @@ class ModCore
 				switch (error.severity)
 				{
 					case NOTICE:
-						Debug.logInfo(error.message, null);
+						trace('[INFO] ' +  error.message, null);
 					case WARNING:
-						Debug.logWarn(error.message, null);
+						trace('[WARN] ' +  error.message, null);
 					case ERROR:
-						Debug.logError(error.message, null);
+						trace('[ERROR] ' +  error.message, null);
 				}
 		}
 	}
 	#end
 }
 
-#if MODCORE_ALLOWED
+#if MODS_ALLOWED
 class ModCoreBackend extends OpenFLBackend
 {
 	public function new()
 	{
 		super();
-		Debug.logTrace('Initialized custom asset loader backend.');
+		trace('Initialized custom asset loader backend.');
 	}
 
 	public override function clearCache()
 	{
 		super.clearCache();
-		Debug.logWarn('Custom asset cache has been cleared.');
+		trace('[WARN] Custom asset cache has been cleared.');
 	}
 
 	public override function exists(id:String):Bool
 	{
-		Debug.logTrace('Call to ModCoreBackend: exists($id)');
+		trace('Call to ModCoreBackend: exists($id)');
 		return super.exists(id);
 	}
 
 	public override function getBytes(id:String):lime.utils.Bytes
 	{
-		Debug.logTrace('Call to ModCoreBackend: getBytes($id)');
+		trace('Call to ModCoreBackend: getBytes($id)');
 		return super.getBytes(id);
 	}
 
 	public override function getText(id:String):String
 	{
-		Debug.logTrace('Call to ModCoreBackend: getText($id)');
+		trace('Call to ModCoreBackend: getText($id)');
 		return super.getText(id);
 	}
 
 	public override function list(type:PolymodAssetType = null):Array<String>
 	{
-		Debug.logTrace('Listing assets in custom asset cache ($type).');
+		trace('Listing assets in custom asset cache ($type).');
 		return super.list(type);
 	}
 }

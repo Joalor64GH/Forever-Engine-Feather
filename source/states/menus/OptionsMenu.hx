@@ -196,7 +196,7 @@ class OptionsMenu extends MusicBeatState
 	function selectOption(newSelection:Int, playSound:Bool = true)
 	{
 		if ((newSelection != curSelection) && (playSound))
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 
 		// direction increment finder
 		var directionIncrement = ((newSelection < curSelection) ? -1 : 1);
@@ -332,7 +332,7 @@ class OptionsMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
 			if (curCategory != 'main')
 				loadSubgroup('main');
 			else if (states.substates.PauseSubstate.toOptions)
@@ -448,7 +448,7 @@ class OptionsMenu extends MusicBeatState
 					// checkmark basics lol
 					if (controls.ACCEPT)
 					{
-						FlxG.sound.play(Paths.sound('confirmMenu'));
+						FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 						lockedMovement = true;
 						FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 						{
@@ -528,7 +528,7 @@ class OptionsMenu extends MusicBeatState
 			else
 				selector.selectorPlay('right', 'press');
 
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 
 			selector.chosenOptionString = selector.options[newSelection];
 
@@ -554,7 +554,7 @@ class OptionsMenu extends MusicBeatState
 		else
 			selector.selectorPlay('right', 'press');
 
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 
 		originalValue += increase;
 		selector.chosenOptionString = Std.string(originalValue);
@@ -566,7 +566,7 @@ class OptionsMenu extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
@@ -579,7 +579,7 @@ class OptionsMenu extends MusicBeatState
 	{
 		if (controls.ACCEPT)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
@@ -594,7 +594,7 @@ class OptionsMenu extends MusicBeatState
 		//
 		if (controls.ACCEPT)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{

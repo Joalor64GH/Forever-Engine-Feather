@@ -230,7 +230,7 @@ class StoryMenu extends MusicBeatState
 
 		if (controls.BACK && !movedBack && !selectedWeek)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
 			movedBack = true;
 			Main.switchState(this, new MainMenu());
 		}
@@ -250,7 +250,7 @@ class StoryMenu extends MusicBeatState
 		{
 			if (stopspamming == false)
 			{
-				FlxG.sound.play(Paths.sound('confirmMenu'));
+				FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 
 				grpWeekText.members[curWeek].startFlashing();
 				for (char in grpWeekCharacters.members)
@@ -355,7 +355,7 @@ class StoryMenu extends MusicBeatState
 			bullShit++;
 		}
 
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 
 		updateText();
 	}

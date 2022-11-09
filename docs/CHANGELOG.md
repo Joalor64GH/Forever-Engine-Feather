@@ -76,3 +76,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Accuracy shouldn't go over 100%, now, additionally, there shouldn't be a percentage symbol while accuracy is at "N/A";
 - Icons have infinite frames (to avoid a wall of icons blocking your vision on freeplay in case you got a third one);
 - It's no longer christmas in Fresh :(
+
+--------------------------
+11/09/22
+
+- [WORK IN PROGRESS]; Error Handling for scripts;
+- [SOURCE]; a new sprite class which can be used to attach sprites to other sprites;
+- Minor UI Adjustments;

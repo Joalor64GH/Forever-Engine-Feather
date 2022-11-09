@@ -117,7 +117,7 @@ function update(elapsed:Float)
 					else if (curSelected >= parsedJson.options.length)
 						curSelected = 0;
 
-					FlxG.sound.play(Paths.sound('scrollMenu'));
+					FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 				}
 			}
 			//
@@ -133,14 +133,14 @@ function update(elapsed:Float)
 	{
 		//
 		selectedSomethin = true;
-		FlxG.sound.play(Paths.sound('cancelMenu'));
+		FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
 		Main.switchState(this, new TitleState());
 	}
 
 	if ((controls.ACCEPT) && (!selectedSomethin))
 	{
 		selectedSomethin = true;
-		FlxG.sound.play(Paths.sound('confirmMenu'));
+		FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 
 		var flashValue:Float = 0.1;
 		if (Init.trueSettings.get('Disable Flashing Lights'))
