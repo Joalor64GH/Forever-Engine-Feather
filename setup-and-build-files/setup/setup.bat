@@ -61,7 +61,7 @@ pause >nul
 haxelib git hxCodec https://github.com/polybiusproxy/hxCodec.git
 echo Press any key to install SScript.
 pause >nul
-haxelib git SScript https://github.com/TheWorldMachinima/SScript
+haxelib git SScript https://github.com/AltronMaxX/SScript
 echo Press any key to install discord-rpc.
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 pause >nul

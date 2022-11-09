@@ -3,7 +3,11 @@ package base;
 import lime.utils.Assets;
 import states.PlayState;
 
+import openfl.Assets as OpenFlAssets;
+import openfl.utils.AssetType;
+
 using StringTools;
+using hx.strings.Strings;
 
 #if sys
 import sys.FileSystem;
@@ -71,7 +75,7 @@ class CoolUtil
 
 		try
 		{
-			var unfilteredLibrary = FileSystem.readDirectory('$subDir/$library');
+			var unfilteredLibrary = listFoldersInPath('$subDir/$library' + (library.endsWith('/') ? '' : '/'));
 
 			for (folder in unfilteredLibrary)
 			{
@@ -126,8 +130,8 @@ class CoolUtil
 
 		var path:String = Paths.getPath(file);
 
-		var absolutePath:String = FileSystem.absolutePath(path);
-		var directory:Array<String> = FileSystem.readDirectory(absolutePath);
+		var absolutePath:String = Assets.getPath(path);
+		var directory:Array<String> = listFilesPathsInPath(absolutePath); //I don't know if this will work as well as it should. @AltronMaxX
 
 		if (directory != null)
 		{
@@ -145,5 +149,83 @@ class CoolUtil
 		}
 
 		return if (directory != null) directory else [];
+	}
+
+	/**
+	 * List all the files under a given subdirectory.
+	 * @param path The path to look under.
+	 * @return The list of paths to files under that path.
+	 */
+	public static function listFilesPathsInPath(path:String)
+	{
+		var dataAssets = OpenFlAssets.list();
+
+		var queryPath = '${path}';
+
+		var results:Array<String> = [];
+
+		for (data in dataAssets)
+		{
+			if (data.indexOf(queryPath) != -1 && !results.contains(data))
+			{
+				results.push(data);
+			}
+		}
+
+		return results;
+	}
+
+	/**
+	 * List all the files under a given subdirectory.
+	 * @param path The path to look under.
+	 * @param fileType The openfl asset type. Default - null.
+	 * @param fileEnd The file end to match file type.
+	 * @return The list of files under that path.
+	 */
+	public static function listFilesInPath(path:String, fileType:AssetType = null, fileEnd:String = '.txt')
+	{
+		var dataAssets = OpenFlAssets.list(fileType);
+
+		var queryPath = '${path}';
+
+		var results:Array<String> = [];
+
+		for (data in dataAssets)
+		{
+			if (data.indexOf(queryPath) != -1
+				&& data.endsWith(fileEnd)
+				&& !results.contains(data.substr(data.indexOf(queryPath) + queryPath.length).replaceAll(fileEnd, '')))
+			{
+				var suffixPos = data.indexOf(queryPath) + queryPath.length;
+				results.push(data.substr(suffixPos).replaceAll(fileEnd, ''));
+			}
+		}
+
+		return results;
+	}
+
+	/**
+	 * List all the folders under a given subdirectory.
+	 * @param path The path to look under.
+	 * @return The list of folders under that path.
+	 */
+	public static function listFoldersInPath(path:String)
+	{
+		var dataAssets = OpenFlAssets.list();
+
+		var queryPath = '${path}';
+
+		var results:Array<String> = [];
+
+		for (data in dataAssets)
+		{
+			if (data.indexOf(queryPath) != -1
+				&& !results.contains(data.substr(data.indexOf(queryPath) + queryPath.length).replace(queryPath, '').removeAfter('/')))
+			{
+				var suffixPos = data.indexOf(queryPath) + queryPath.length;
+				results.push(data.substr(suffixPos).replace(queryPath, '').removeAfter('/'));
+			}
+		}
+		return results;
 	}
 }
