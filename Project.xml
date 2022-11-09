@@ -89,6 +89,17 @@
 	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 
+	<!-- Use defines to configure the behavior of Polymod. -->
+	<haxedef name="POLYMOD_SCRIPT_EXT" value=".hxs" />
+	<haxedef name="POLYMOD_SCRIPT_CLASS_EXT" value=".hxs" />
+	<haxedef name="POLYMOD_SCRIPT_LIBRARY" value="scripts" />
+	<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
+	<haxedef name="POLYMOD_ROOT_PATH" value="assets/scripts/" />
+	<haxedef name="POLYMOD_MOD_PACK_FILE" value="_polymod_pack.txt" />
+	<haxedef name="POLYMOD_MOD_METADATA_FILE" value="_polymod_meta.json" />
+	<haxedef name="POLYMOD_MOD_ICON_FILE"  value="_polymod_icon.png" />
+	<haxedef name="POLYMOD_DEBUG" if="debug" />
+
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<icon path="art/icon16.png" size='16' />

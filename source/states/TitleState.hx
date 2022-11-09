@@ -35,8 +35,7 @@ import modding.PolymodHandler;
 import polymod.Polymod;
 import polymod.Polymod.Framework;
 import polymod.Polymod.PolymodError;
-import sys.FileSystem;
-import sys.io.File;
+import openfl.Assets;
 #end
 
 using StringTools;

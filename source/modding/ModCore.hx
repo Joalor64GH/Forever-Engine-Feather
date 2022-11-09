@@ -36,7 +36,8 @@ class ModCore
         'json' => TEXT,
         'txt' => TEXT,
         'hx' => TEXT,
-        'hsc' => TEXT,
+        'hxs' => TEXT,
+		'hxc' => TEXT,
         'hscript' => TEXT,
         'ttf' => FONT,
         'otf' => FONT
