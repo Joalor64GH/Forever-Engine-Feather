@@ -83,3 +83,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [WORK IN PROGRESS]; Error Handling for scripts;
 - [SOURCE]; a new sprite class which can be used to attach sprites to other sprites;
 - Minor UI Adjustments;
+
+--------------------------
+10/11/22
+
+- Judgement and Combo Fade Animations are now bound to time;
+* additionally, they can (optionally) be recycled sprites rather than being added every note hit;
+- [DOCUMENTATION]: began working on small bits of documentation which will be expanded and updated with time;
+- [WORK IN PROGRESS]: Mod Managment with **Polymod!**;
