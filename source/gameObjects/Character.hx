@@ -18,8 +18,7 @@ using StringTools;
 
 enum abstract CharacterOrigin(String) to String
 {
-	var UNDERSCORE;
-	var FOREVER_FEATHER; // need to come up with a format for this, maybe.
+	var FOREVER_FEATHER;
 	var PSYCH_ENGINE;
 	var FUNKIN_COCOA;
 }
@@ -41,6 +40,7 @@ typedef CharacterData =
 	var noteSkin:String;
 	var splashSkin:String;
 	var assetModifier:String;
+	var missColor:Array<Int>; // for fake misses;
 	var icon:String;
 }
 
@@ -59,7 +59,7 @@ class Character extends FNFSprite
 	public var hasMissAnims:Bool = false;
 	public var danceIdle:Bool = false;
 
-	public var characterType:String = UNDERSCORE;
+	public var characterType:String = FOREVER_FEATHER;
 	public var characterData:CharacterData;
 
 	public var characterScripts:Array<ScriptHandler> = [];
@@ -80,6 +80,8 @@ class Character extends FNFSprite
 		characterData = {
 			flipX: isPlayer,
 			flipY: false,
+			antialiasing: true,
+			quickDancer: false,
 			offsetY: 0,
 			offsetX: 0,
 			camOffsetY: 0,
@@ -87,13 +89,12 @@ class Character extends FNFSprite
 			singDuration: 4,
 			headBopSpeed: 2,
 			healthColor: [255, 255, 255],
-			antialiasing: true,
+			missColor: [112, 105, 255],
 			adjustPos: !character.startsWith('gf'),
 			noteSkin: "NOTE_assets",
-			splashSkin: 'noteSplashes',
+			splashSkin: "noteSplashes",
 			assetModifier: "base",
-			icon: null,
-			quickDancer: false
+			icon: null
 		};
 
 		if (characterData.icon == null)
@@ -149,7 +150,7 @@ class Character extends FNFSprite
 				{
 					try
 					{
-						generateUnderscoreChar(character); // old system, for now i guess;
+						generateChar(character); // old system, for now i guess;
 					}
 					catch (e)
 					{
@@ -376,10 +377,10 @@ class Character extends FNFSprite
 	}
 
 	/**
-	 * [Generates a Character in the Forever Engine Underscore Format]
+	 * [Generates a Character in the Forever Engine Feather Format]
 	 * @param char returns the character that should be generated
 	 */
-	function generateUnderscoreChar(char:String = 'bf')
+	function generateChar(char:String = 'bf')
 	{
 		var pushedChars:Array<String> = [];
 
@@ -388,7 +389,7 @@ class Character extends FNFSprite
 
 		if (!pushedChars.contains(char))
 		{
-			var script:ScriptHandler = new ScriptHandler(Paths.characterModule(char, 'config', UNDERSCORE));
+			var script:ScriptHandler = new ScriptHandler(Paths.characterModule(char, 'config', FOREVER_FEATHER));
 
 			if (script.interp == null)
 				trace("Something terrible occured! Skipping.");

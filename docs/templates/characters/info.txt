@@ -1,0 +1,7 @@
+Characters are (usually) handled by a script
+That script contains information such as animation prefixes and character offsets
+the image name by default should be the same as the character's folder name
+
+you can override that behavior by using the function "setFrames" on a character
+
+e.g: setFrames("BOYFRIEND", "images/characters");

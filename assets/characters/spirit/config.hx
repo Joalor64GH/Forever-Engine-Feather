@@ -15,6 +15,7 @@ function loadAnimations()
 	setGraphicSize(get('width') * 6);
 	characterData.antialiasing = false;
 	characterData.assetModifier = 'pixel';
+	characterData.missColor = [174, 181, 229];
 
 	playAnim('idle');
 

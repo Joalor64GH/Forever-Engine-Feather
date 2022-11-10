@@ -712,6 +712,8 @@ class PlayState extends MusicBeatState
 				var dunceNote:Note = unspawnNotes[0];
 				var strumline:Strumline = (dunceNote.mustPress ? bfStrums : dadStrums);
 
+				callFunc('noteSpawn', [dunceNote, dunceNote.noteData, dunceNote.noteType, dunceNote.isSustainNote]);
+
 				// push note to its correct strumline
 				strumLines.members[
 					Math.floor((dunceNote.noteData + (dunceNote.mustPress ? 4 : 0)) / strumline.keyAmount)
@@ -990,7 +992,12 @@ class PlayState extends MusicBeatState
 			coolNote.noteHit();
 
 			for (character in strumline.characters)
+			{
+				// reset color if it's not white;
+				if (character.color != 0xFFFFFFFF)
+					character.color = 0xFFFFFFFF;
 				characterPlayAnimation(coolNote, character);
+			}
 			if (strumline.receptors.members[coolNote.noteData] != null)
 				strumline.receptors.members[coolNote.noteData].playAnim('confirm', true);
 
@@ -1062,8 +1069,9 @@ class PlayState extends MusicBeatState
 				character.playAnim('sing' + stringDirection.toUpperCase() + missString, lockMiss);
 
 				// fake misses;
+				var missColor = character.characterData.missColor;
 				if (missString == null || missString == '')
-					character.color = 0xFF7069FF; // *sad spongebob image* bwoomp.
+					character.color = FlxColor.fromRGB(Std.int(missColor[0]), Std.int(missColor[1]), Std.int(missColor[2])); // *sad spongebob image* bwoomp.
 			}
 		}
 		decreaseCombo(popMiss);
