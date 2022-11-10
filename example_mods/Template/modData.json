@@ -1,7 +1,13 @@
 {
 	"title": "Template",
 	"description": "A template for your mods made with polymod.",
-	"author": "You!",
+	"contributors": [
+	{
+		"name":"You!",
+		"role":"Author",
+		"email":"Your mail",
+		"url":"Your social network or something else"
+	}],
 	"api_version": "1.6.0",
 	"mod_version": "1.0.0",
 	"license": "Apache-2.0"
