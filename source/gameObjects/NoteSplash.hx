@@ -7,10 +7,13 @@ import dependency.FNFSprite;
 **/
 class NoteSplash extends FNFSprite
 {
+	public var noteData:Int = 0;
+
 	public function new(noteData:Int)
 	{
 		super(x, y);
 		alpha = 0.000001;
+		this.noteData = noteData;
 	}
 
 	override function update(elapsed:Float)

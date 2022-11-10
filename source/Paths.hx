@@ -142,6 +142,7 @@ class Paths
 				{
 					newGraphic = FlxGraphic.fromBitmapData(bitmap, false, key, false);
 				}
+				newGraphic.persist = true;
 				currentTrackedAssets.set(key, newGraphic);
 			}
 			localTrackedAssets.push(key);

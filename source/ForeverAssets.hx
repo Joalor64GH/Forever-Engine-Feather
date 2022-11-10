@@ -1,6 +1,7 @@
 package;
 
 import base.feather.ScriptHandler;
+import dependency.FNFSprite;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -22,8 +23,8 @@ using StringTools;
 class ForeverAssets
 {
 	//
-	public static function generateCombo(asset:String, number:String, allSicks:Bool, assetModifier:String = 'base', changeableSkin:String = 'default',
-			baseLibrary:String, negative:Bool, createdColor:FlxColor, scoreInt:Int):FlxSprite
+	public static function generateCombo(asset:String, assetGroup:FlxTypedGroup<FNFSprite>, number:String, allSicks:Bool, assetModifier:String = 'base',
+			changeableSkin:String = 'default', baseLibrary:String, negative:Bool, createdColor:FlxColor, scoreInt:Int):FNFSprite
 	{
 		var width = 100;
 		var height = 140;
@@ -33,8 +34,13 @@ class ForeverAssets
 			width = 10;
 			height = 12;
 		}
-		var comboNumbers:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary)),
-			true, width, height);
+		var comboNumbers:FNFSprite;
+
+		if (assetGroup != null && Init.trueSettings.get('Judgement Recycling'))
+			comboNumbers = assetGroup.recycle(FNFSprite);
+		else
+			comboNumbers = new FNFSprite();
+		comboNumbers.loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary)), true, width, height);
 		switch (assetModifier)
 		{
 			default:
@@ -52,6 +58,7 @@ class ForeverAssets
 				], 0, false);
 				comboNumbers.animation.play('base');
 		}
+		comboNumbers.zDepth = -Conductor.songPosition;
 
 		if (assetModifier == 'pixel')
 			comboNumbers.setGraphicSize(Std.int(comboNumbers.width * PlayState.daPixelZoom));
@@ -71,8 +78,8 @@ class ForeverAssets
 		return comboNumbers;
 	}
 
-	public static function generateRating(asset:String, perfectSick:Bool, timing:String, assetModifier:String = 'base', changeableSkin:String = 'default',
-			baseLibrary:String):FlxSprite
+	public static function generateRating(asset:String, assetGroup:FlxTypedGroup<FNFSprite>, perfectSick:Bool, timing:String, assetModifier:String = 'base',
+			changeableSkin:String = 'default', baseLibrary:String):FNFSprite
 	{
 		var width = 500;
 		var height = 163;
@@ -81,8 +88,13 @@ class ForeverAssets
 			width = 72;
 			height = 32;
 		}
-		var judgement:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ForeverTools.returnSkinAsset('judgements', assetModifier, changeableSkin,
-			baseLibrary)), true, width, height);
+		var judgement:FNFSprite;
+		if (assetGroup != null && Init.trueSettings.get('Judgement Recycling'))
+			judgement = assetGroup.recycle(FNFSprite);
+		else
+			judgement = new FNFSprite();
+
+		judgement.loadGraphic(Paths.image(ForeverTools.returnSkinAsset('judgements', assetModifier, changeableSkin, baseLibrary)), true, width, height);
 		switch (assetModifier)
 		{
 			default:
@@ -101,6 +113,7 @@ class ForeverAssets
 				], 24, false);
 				judgement.animation.play('base');
 		}
+		judgement.zDepth = -Conductor.songPosition;
 
 		if (assetModifier == 'pixel')
 			judgement.setGraphicSize(Std.int(judgement.width * PlayState.daPixelZoom * 0.7));
@@ -117,11 +130,9 @@ class ForeverAssets
 			changeableSkin:String = 'default', baseLibrary:String, noteType:String = 'default', noteData:Int):NoteSplash
 	{
 		//
-		var tempSplash:NoteSplash = group.recycle(NoteSplash, function()
-		{
-			var noteSplash:NoteSplash = new NoteSplash(noteData);
-			return noteSplash;
-		});
+		var tempSplash:NoteSplash = group.recycle(NoteSplash);
+		tempSplash.noteData = noteData;
+		tempSplash.zDepth = -Conductor.songPosition;
 
 		var noteScript:ScriptHandler = Note.getNoteScript(noteType);
 

@@ -13,9 +13,8 @@ function loadAnimations()
 		addOffset("singDOWN", 17, -375);
 		addOffset("singUP", 8, -334);
 		addOffset("singRIGHT", 50, -348);
-		characterData.camOffsetX = 30;
-		characterData.camOffsetY = 330;
-		characterData.offsetY = -350;
+		characterData.camOffsets = [30, 330];
+		characterData.offsets = [0, -350];
 	}
 	else
 	{
@@ -24,7 +23,7 @@ function loadAnimations()
 		addOffset("singDOWN", -48, -31);
 		addOffset("singUP", -45, 11);
 		addOffset("singRIGHT", -61, -14);
-		characterData.camOffsetY = -5;
+		characterData.camOffsets = [0, -5];
 		characterData.flipX = false;
 	}
 

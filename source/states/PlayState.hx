@@ -2,6 +2,7 @@ package states;
 
 import base.*;
 import base.feather.*;
+import dependency.FNFSprite;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -19,6 +20,7 @@ import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import gameObjects.*;
 import gameObjects.Strumline.Receptor;
@@ -131,6 +133,9 @@ class PlayState extends MusicBeatState
 
 	public static var stageGroup:FlxTypedGroup<Stage>;
 
+	public static var ratingPlacement:FlxPoint;
+	public static var comboPlacement:FlxPoint;
+
 	// strumlines
 	public static var dadStrums:Strumline;
 	public static var bfStrums:Strumline;
@@ -144,6 +149,10 @@ class PlayState extends MusicBeatState
 	// Other;
 	public static var lastRating:FlxSprite;
 	public static var lastCombo:Array<FlxSprite>;
+
+	// groups, used to sort through ratings and combo;
+	public var judgementsGroup:FlxTypedGroup<FNFSprite>;
+	public var comboGroup:FlxTypedGroup<FNFSprite>;
 
 	public var gfSpeed:Int = 1;
 
@@ -290,6 +299,12 @@ class PlayState extends MusicBeatState
 
 		ScriptHandler.callScripts(moduleArray);
 
+		ratingPlacement = new FlxPoint();
+		comboPlacement = new FlxPoint();
+
+		ratingPlacement.set();
+		comboPlacement.set();
+
 		// cache shit
 		displayScore('sick', 'early', true);
 		//
@@ -399,6 +414,14 @@ class PlayState extends MusicBeatState
 		add(uiHUD);
 		uiHUD.cameras = [camHUD];
 		//
+
+		if (Init.trueSettings.get('Judgement Recycling'))
+		{
+			judgementsGroup = new FlxTypedGroup<FNFSprite>();
+			comboGroup = new FlxTypedGroup<FNFSprite>();
+			add(judgementsGroup);
+			add(comboGroup);
+		}
 
 		// create a hud over the hud camera for dialogue
 		dialogueHUD = new FlxCamera();
@@ -601,7 +624,9 @@ class PlayState extends MusicBeatState
 			// pause the game if the game is allowed to pause and enter is pressed
 			if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 			{
-				pauseGame();
+				stopTimers();
+				// open pause substate
+				openSubState(new states.substates.PauseSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 			}
 
 			// make sure you're not cheating lol
@@ -653,8 +678,12 @@ class PlayState extends MusicBeatState
 					var getCenterX = char.getMidpoint().x + 100;
 					var getCenterY = char.getMidpoint().y - 100;
 
-					camFollow.setPosition(getCenterX + camDisplaceX + char.characterData.camOffsetX,
-						getCenterY + camDisplaceY + char.characterData.camOffsetY);
+					camFollow.setPosition(getCenterX
+						+ camDisplaceX
+						+ char.characterData.camOffsets[0],
+						getCenterY
+						+ camDisplaceY
+						+ char.characterData.camOffsets[1]);
 
 					if (char.curCharacter == 'mom')
 						vocals.volume = 1;
@@ -679,8 +708,12 @@ class PlayState extends MusicBeatState
 							getCenterY = char.getMidpoint().y - 200;
 					}
 
-					camFollow.setPosition(getCenterX + camDisplaceX - char.characterData.camOffsetX,
-						getCenterY + camDisplaceY + char.characterData.camOffsetY);
+					camFollow.setPosition(getCenterX
+						+ camDisplaceX
+						- char.characterData.camOffsets[0],
+						getCenterY
+						+ camDisplaceY
+						+ char.characterData.camOffsets[1]);
 				}
 			}
 
@@ -1168,7 +1201,7 @@ class PlayState extends MusicBeatState
 		//
 	}
 
-	public function pauseGame()
+	public function stopTimers()
 	{
 		// pause discord rpc
 		updateRPC(true);
@@ -1192,9 +1225,6 @@ class PlayState extends MusicBeatState
 			if (!twn.finished)
 				twn.active = false;
 		});
-
-		// open pause substate
-		openSubState(new states.substates.PauseSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 	}
 
 	override public function onFocus():Void
@@ -1208,7 +1238,11 @@ class PlayState extends MusicBeatState
 	override public function onFocusLost():Void
 	{
 		if (canPause && !paused && !bfStrums.autoplay && !Init.trueSettings.get('Auto Pause'))
-			pauseGame();
+		{
+			stopTimers();
+			// open pause substate
+			openSubState(new states.substates.PauseSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+		}
 		callFunc('onFocusLost', []);
 		super.onFocusLost();
 	}
@@ -1313,27 +1347,31 @@ class PlayState extends MusicBeatState
 			"oh but if the rating isn't sick why not just reset it"
 			because miss judgements can pop, and they dont mess with your sick combo
 		 */
-		var rating = ForeverAssets.generateRating('$daRating', (daRating == 'sick' ? Timings.perfectCombo : false), timing, assetModifier, changeableSkin,
-			'UI');
-		add(rating);
+		var rating = ForeverAssets.generateRating('$daRating', judgementsGroup, (daRating == 'sick' ? Timings.perfectCombo : false), timing, assetModifier,
+			changeableSkin, 'UI');
+		rating.setPosition(rating.x + ratingPlacement.x, rating.y + ratingPlacement.y);
+		if (!Init.trueSettings.get('Judgement Recycling'))
+			insert(members.indexOf(strumLines), rating);
 
 		if (!Init.trueSettings.get('Simply Judgements'))
 		{
-			add(rating);
+			if (!Init.trueSettings.get('Judgement Recycling'))
+				insert(members.indexOf(strumLines), rating);
 
-			FlxTween.tween(rating, {alpha: 0}, 0.2, {
+			FlxTween.tween(rating, {alpha: 0}, (Conductor.stepCrochet) / 1000, {
 				onComplete: function(tween:FlxTween)
 				{
 					rating.kill();
 				},
-				startDelay: Conductor.crochet * 0.00125
+				startDelay: ((Conductor.crochet + Conductor.stepCrochet * 2) / 1000)
 			});
 		}
 		else
 		{
 			if (lastRating != null)
 				lastRating.kill();
-			add(rating);
+			if (!Init.trueSettings.get('Judgement Recycling'))
+				insert(members.indexOf(strumLines), rating);
 			lastRating = rating;
 			FlxTween.tween(rating, {y: rating.y + 20}, 0.2, {type: FlxTweenType.BACKWARD, ease: FlxEase.circOut});
 			FlxTween.tween(rating, {"scale.x": 0, "scale.y": 0}, 0.1, {
@@ -1341,7 +1379,7 @@ class PlayState extends MusicBeatState
 				{
 					rating.kill();
 				},
-				startDelay: Conductor.crochet * 0.00125
+				startDelay: ((Conductor.crochet + Conductor.stepCrochet * 2) / 1000)
 			});
 		}
 		// */
@@ -1386,24 +1424,28 @@ class PlayState extends MusicBeatState
 		for (scoreInt in 0...stringArray.length)
 		{
 			// numScore.loadGraphic(Paths.image('UI/' + pixelModifier + 'num' + stringArray[scoreInt]));
-			var numScore = ForeverAssets.generateCombo('combo', stringArray[scoreInt], (!negative ? Timings.perfectCombo : false), assetModifier,
+			var numScore = ForeverAssets.generateCombo('combo', comboGroup, stringArray[scoreInt], (!negative ? Timings.perfectCombo : false), assetModifier,
 				changeableSkin, 'UI', negative, createdColor, scoreInt);
-			add(numScore);
+			numScore.setPosition(numScore.x + comboPlacement.x, numScore.y + comboPlacement.y);
+			if (!Init.trueSettings.get('Judgement Recycling'))
+				insert(members.indexOf(strumLines), numScore);
 			// hardcoded lmao
 			if (!Init.trueSettings.get('Simply Judgements'))
 			{
-				add(numScore);
-				FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+				if (!Init.trueSettings.get('Judgement Recycling'))
+					insert(members.indexOf(strumLines), numScore);
+				FlxTween.tween(numScore, {alpha: 0}, (Conductor.stepCrochet * 2) / 1000, {
 					onComplete: function(tween:FlxTween)
 					{
 						numScore.kill();
 					},
-					startDelay: Conductor.crochet * 0.002
+					startDelay: (Conductor.crochet) / 1000
 				});
 			}
 			else
 			{
-				add(numScore);
+				if (!Init.trueSettings.get('Judgement Recycling'))
+					insert(members.indexOf(strumLines), numScore);
 				// centers combo
 				numScore.y += 10;
 				numScore.x -= 95;
@@ -1420,6 +1462,12 @@ class PlayState extends MusicBeatState
 			}
 			numScore.x += 100;
 		}
+
+		// actually sort through the groups;
+		if (judgementsGroup != null)
+			judgementsGroup.sort(FNFSprite.depthSorting, FlxSort.DESCENDING);
+		if (comboGroup != null)
+			comboGroup.sort(FNFSprite.depthSorting, FlxSort.DESCENDING);
 	}
 
 	function healthCall(?ratingMultiplier:Float = 0)

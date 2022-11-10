@@ -204,14 +204,14 @@ class Init extends FlxState
 		],
 		'Centered Notefield' => [false, Checkmark, "Center the notes, disables the enemy's notes."],
 		/*
-		"Vanilla Menus" => [
-			false,
-			Checkmark,
-			"Whether to use the old Base Game menus instead of the Custom-made ones",
-			FORCED
-		],
-		// doing later
-		*/
+			"Vanilla Menus" => [
+				false,
+				Checkmark,
+				"Whether to use the old Base Game menus instead of the Custom-made ones",
+				FORCED
+			],
+			// doing later
+		 */
 		'Skip Text' => [
 			'freeplay only',
 			Selector,
@@ -228,7 +228,13 @@ class Init extends FlxState
 		'Simply Judgements' => [
 			false,
 			Checkmark,
-			"Simplifies the judgement animations, displaying only one judgement/rating sprite at a time.",
+			"Simplifies the judgement animations, displaying only one judgement sprite at a time.",
+			NOT_FORCED
+		],
+		'Judgement Recycling' => [
+			true,
+			Checkmark,
+			"Recycles judgements and combo rather than adding one every note hit, may cause layering issues.",
 			NOT_FORCED
 		],
 	];
@@ -307,7 +313,6 @@ class Init extends FlxState
 		FlxG.fixedTimestep = false; // This ensures that the game is not tied to the FPS
 		FlxG.mouse.useSystemCursor = true; // Use system cursor because it's prettier
 		FlxG.mouse.visible = false; // Hide mouse on start
-		FlxGraphic.defaultPersist = true; // make sure we control all of the memory
 
 		#if MODS_ALLOWED
 		if (openfl.Assets.exists('mods/')) {
