@@ -28,6 +28,10 @@ class Note extends FNFSprite
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 
+	public var ignoreNote:Bool = false;
+	public var noteSplash:Bool = false;
+	public var isMine:Bool = false;
+
 	// only useful for charting stuffs
 	public var chartSustain:FlxSprite = null;
 	public var rawNoteData:Int;

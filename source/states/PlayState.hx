@@ -36,6 +36,7 @@ import song.SongFormat.SwagSong;
 import song.SongFormat.TimedEvent;
 import states.menus.*;
 import states.substates.GameOverSubstate;
+import base.input.Controls as NewControls;
 
 using StringTools;
 
@@ -584,9 +585,35 @@ class PlayState extends MusicBeatState
 		super.destroy();
 	}
 
-	var staticDisplace:Int = 0;
-
 	var lastSection:Int = 0;
+
+	@:isVar public var songSpeed(get, default):Float = 0;
+
+	function get_songSpeed()
+		return FlxMath.roundDecimal(songSpeed, 2);
+
+	function set_songSpeed(value:Float):Float
+	{
+		var offset:Float = songSpeed / value;
+		for (note in bfStrums.allNotes)
+		{
+			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
+			{
+				note.scale.y *= offset;
+				note.updateHitbox();
+			}
+		}
+		for (note in dadStrums.allNotes)
+		{
+			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
+			{
+				note.scale.y *= offset;
+				note.updateHitbox();
+			}
+		}
+
+		return cast songSpeed = value;
+	}
 
 	override public function update(elapsed:Float)
 	{
@@ -603,11 +630,11 @@ class PlayState extends MusicBeatState
 		if (dialogueBox != null && dialogueBox.alive)
 		{
 			// wheee the shift closes the dialogue
-			if (FlxG.keys.justPressed.SHIFT)
+			if (NewControls.getPressEvent("skipDiag"))
 				dialogueBox.closeDialog();
 
 			// the change I made was just so that it would only take accept inputs
-			if (controls.ACCEPT && dialogueBox.textStarted)
+			if (NewControls.getPressEvent("accept") && dialogueBox.textStarted)
 			{
 				FlxG.sound.play(Paths.sound('$assetModifier/menus/cancelMenu'));
 				dialogueBox.curPage += 1;
@@ -622,7 +649,7 @@ class PlayState extends MusicBeatState
 		if (!inCutscene)
 		{
 			// pause the game if the game is allowed to pause and enter is pressed
-			if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+			if (NewControls.getPressEvent("pause") && startedCountdown && canPause)
 			{
 				stopTimers();
 				// open pause substate
@@ -633,7 +660,7 @@ class PlayState extends MusicBeatState
 			if (!isStoryMode)
 			{
 				// charting state (more on that later)
-				if ((FlxG.keys.justPressed.SEVEN) && (!startingSong))
+				if ((NewControls.getPressEvent("debug")) && (!startingSong))
 				{
 					resetMusic();
 					if (FlxG.keys.pressed.SHIFT)
@@ -643,7 +670,7 @@ class PlayState extends MusicBeatState
 					preventScoring = true;
 				}
 
-				if (FlxG.keys.justPressed.SIX)
+				if (NewControls.getPressEvent("autoplay"))
 				{
 					preventScoring = true;
 					bfStrums.autoplay = !bfStrums.autoplay;
@@ -734,7 +761,7 @@ class PlayState extends MusicBeatState
 			// Controls
 
 			// RESET = Quick Game Over Screen
-			if (controls.RESET && !startingSong && !isStoryMode)
+			if (NewControls.getPressEvent("reset") && !startingSong && !isStoryMode)
 				health = 0;
 
 			deathCheck();
@@ -759,7 +786,7 @@ class PlayState extends MusicBeatState
 			if (Init.trueSettings.get('Controller Mode'))
 				controllerInput();
 
-			eventCheck();
+			parseEventColumn();
 			callFunc('postUpdate', [elapsed]);
 		}
 	}
@@ -844,9 +871,7 @@ class PlayState extends MusicBeatState
 			for (strumline in strumLines)
 			{
 				// set the notes x and y
-				var downscrollMultiplier = 1;
-				if (Init.trueSettings.get('Downscroll'))
-					downscrollMultiplier = -1;
+				var downscrollMultiplier:Int = (strumline.downscroll ? -1 : 1) * FlxMath.signOf(songSpeed);
 
 				strumline.allNotes.forEachAlive(function(daNote:Note)
 				{
@@ -874,7 +899,7 @@ class PlayState extends MusicBeatState
 						if ((daNote.animation.curAnim.name.endsWith('holdend')) && (daNote.prevNote != null))
 						{
 							daNote.y -= ((daNote.prevNote.height / 2) * downscrollMultiplier);
-							if (Init.trueSettings.get('Downscroll'))
+							if (strumline.downscroll)
 							{
 								daNote.y += (daNote.height * 2);
 								if (daNote.endHoldOffset == Math.NEGATIVE_INFINITY)
@@ -889,7 +914,7 @@ class PlayState extends MusicBeatState
 								daNote.y += ((daNote.height / 2) * downscrollMultiplier);
 						}
 
-						if (Init.trueSettings.get('Downscroll'))
+						if (downscrollMultiplier < 0)
 						{
 							daNote.flipY = true;
 							if ((daNote.parentNote != null && daNote.parentNote.wasGoodHit)
@@ -902,7 +927,7 @@ class PlayState extends MusicBeatState
 								daNote.clipRect = swagRect;
 							}
 						}
-						else
+						else if (downscrollMultiplier > 0)
 						{
 							if ((daNote.parentNote != null && daNote.parentNote.wasGoodHit)
 								&& daNote.y + daNote.offset.y * daNote.scale.y <= center
@@ -916,7 +941,7 @@ class PlayState extends MusicBeatState
 						}
 					}
 					// hell breaks loose here, we're using nested scripts!
-					mainControls(daNote, strumline, strumline.autoplay);
+					mainControls(daNote, strumline);
 
 					// check where the note is and make sure it is either active or inactive
 					if (daNote.y > FlxG.height)
@@ -974,8 +999,8 @@ class PlayState extends MusicBeatState
 					}
 
 					// if the note is off screen (above)
-					if ((((!Init.trueSettings.get('Downscroll')) && (daNote.y < -daNote.height))
-						|| ((Init.trueSettings.get('Downscroll')) && (daNote.y > (FlxG.height + daNote.height))))
+					if ((((!strumline.downscroll) && (daNote.y < -daNote.height))
+						|| ((strumline.downscroll) && (daNote.y > (FlxG.height + daNote.height))))
 						&& (daNote.tooLate || daNote.wasGoodHit))
 						destroyNote(strumline, daNote);
 				});
@@ -1022,8 +1047,6 @@ class PlayState extends MusicBeatState
 
 			callFunc(coolNote.mustPress ? 'goodNoteHit' : 'opponentNoteHit', [coolNote, strumline]);
 
-			coolNote.noteHit();
-
 			for (character in strumline.characters)
 			{
 				// reset color if it's not white;
@@ -1058,22 +1081,27 @@ class PlayState extends MusicBeatState
 					}
 				}
 
-				if (!coolNote.isSustainNote)
+				if (!coolNote.ignoreNote && !coolNote.isMine)
 				{
-					increaseCombo(foundRating, coolNote.noteData, strumline);
-					popUpScore(foundRating, ratingTiming, strumline, coolNote);
-					if (coolNote.childrenNotes.length > 0)
-						Timings.notesHit++;
-					healthCall(Timings.judgementsMap.get(foundRating)[3]);
-				}
-				else if (coolNote.isSustainNote)
-				{
-					// call updated accuracy stuffs
-					if (coolNote.parentNote != null)
+					if (!coolNote.isSustainNote)
 					{
-						Timings.updateAccuracy(100, true, coolNote.parentNote.childrenNotes.length);
-						healthCall(100 / coolNote.parentNote.childrenNotes.length);
+						increaseCombo(foundRating, coolNote.noteData, strumline);
+						popUpScore(foundRating, ratingTiming, strumline, coolNote);
+						if (coolNote.childrenNotes.length > 0)
+							Timings.notesHit++;
+						healthCall(Timings.judgementsMap.get(foundRating)[3]);
 					}
+					else
+					{
+						// call updated accuracy stuffs
+						if (coolNote.parentNote != null)
+						{
+							Timings.updateAccuracy(100, true, coolNote.parentNote.childrenNotes.length);
+							healthCall(100 / coolNote.parentNote.childrenNotes.length);
+						}
+					}
+
+					coolNote.noteHit();
 				}
 			}
 
@@ -1136,12 +1164,12 @@ class PlayState extends MusicBeatState
 		character.holdTimer = 0;
 	}
 
-	private function mainControls(daNote:Note, strumline:Strumline, autoplay:Bool):Void
+	private function mainControls(daNote:Note, strumline:Strumline):Void
 	{
 		var notesPressedAutoplay = [];
 
 		// here I'll set up the autoplay functions
-		if (autoplay)
+		if (strumline.autoplay)
 		{
 			// check if the note was a good hit
 			if (daNote.strumTime <= Conductor.songPosition)
@@ -1149,12 +1177,14 @@ class PlayState extends MusicBeatState
 				// kill the note, then remove it from the array
 				if (strumline.displayJudges)
 					notesPressedAutoplay.push(daNote);
-				goodNoteHit(daNote, strumline);
+
+				if (!daNote.isMine && !daNote.ignoreNote)
+					goodNoteHit(daNote, strumline);
 			}
 		}
 
 		var holdControls:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
-		if (!autoplay)
+		if (!strumline.autoplay)
 		{
 			// check if anything is held
 			if (holdControls.contains(true))
@@ -1270,7 +1300,7 @@ class PlayState extends MusicBeatState
 		var ratingScore:Int = 50;
 
 		// notesplashes
-		if (baseRating == "sick")
+		if (baseRating == "sick" || coolNote.noteSplash)
 			// create the note splash if you hit a sick
 			createSplash(coolNote, strumline);
 		else
@@ -1534,7 +1564,7 @@ class PlayState extends MusicBeatState
 		for (i in timedEvents)
 		{
 			if (timedEvents.length > 0)
-				pushedEvent(i);
+				loadedEventAction(i);
 		}
 
 		// give the game the heads up to be able to start
@@ -1543,7 +1573,7 @@ class PlayState extends MusicBeatState
 		callFunc('generateSong', []);
 	}
 
-	function eventCheck()
+	function parseEventColumn()
 	{
 		while (timedEvents.length > 0)
 		{
@@ -1553,36 +1583,34 @@ class PlayState extends MusicBeatState
 				if (Conductor.songPosition < line.strumTime)
 					break;
 
-				eventNoteHit(line.event, [line.val1, line.val2, line.val3]);
+				eventTrigger(line.event, [line.val1, line.val2, line.val3]);
 				timedEvents.shift();
 			}
 		}
 	}
 
-	function pushedEvent(event:TimedEvent)
+	function loadedEventAction(event:TimedEvent)
 	{
-		// trace('Event Name: ${event.event}, Event V1: ${event.val1}, Event V2: ${event.val2}, Event V3: ${event.val3}');
-
 		var params:Array<String> = [event.val1, event.val2, event.val3];
 
 		if (Events.loadedEvents.get(event.event) != null)
 		{
 			var eventModule:ScriptHandler = Events.loadedEvents.get(event.event);
-			eventModule.call('eventPreload', [params]);
+			eventModule.call('loadedEventAction', [params]);
 		}
 	}
 
 	public var songSpeedTween:FlxTween;
 
-	public function eventNoteHit(event:String, params:Array<String>)
+	public function eventTrigger(event:String, params:Array<String>)
 	{
 		if (Events.loadedEvents.get(event) != null)
 		{
 			var eventModule:ScriptHandler = Events.loadedEvents.get(event);
-			eventModule.call('eventNoteHit', [params]);
+			eventModule.call('eventTrigger', [params]);
 		}
 
-		callFunc('eventNoteHit', [event, params]);
+		callFunc('eventTrigger', [event, params]);
 	}
 
 	function resyncVocals():Void

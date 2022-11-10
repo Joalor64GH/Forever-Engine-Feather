@@ -149,7 +149,7 @@ class DialogueBox extends FlxSpriteGroup
 		add(alphabetText);
 
 		// skip text
-		var skipText = new FlxText(100, 670, 1000, "PRESS SHIFT TO SKIP", 20);
+		var skipText = new FlxText(100, 670, 1000, "PRESS SHIFT OR END TO SKIP", 20);
 		skipText.alignment = FlxTextAlign.CENTER;
 
 		skipText.borderStyle = FlxTextBorderStyle.OUTLINE;

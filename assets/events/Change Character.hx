@@ -1,4 +1,4 @@
-function eventPreload(params)
+function loadedEventAction(params)
 {
 	switch (params[0])
 	{
@@ -11,7 +11,7 @@ function eventPreload(params)
 	}
 }
 
-function eventNoteHit(params)
+function eventTrigger(params)
 {
 	var changeTimer:FlxTimer;
 	var timer:Float = Std.parseFloat(params[2]);

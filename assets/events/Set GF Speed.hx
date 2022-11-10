@@ -1,4 +1,4 @@
-function eventNoteHit(value1, value2, value3)
+function eventTrigger(value1, value2, value3)
 {
 	var speed:Int = Std.parseInt(value1);
 	if (Math.isNaN(speed) || speed <= 0)
