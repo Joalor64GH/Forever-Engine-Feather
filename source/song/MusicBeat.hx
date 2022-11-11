@@ -1,14 +1,12 @@
 package song;
 
 import base.input.Controls;
-import base.Controls as OldControls;
 import dependency.FNFUIState;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
-import playerData.PlayerSettings;
 import song.Conductor.BPMChangeEvent;
 
 /* 
@@ -26,11 +24,6 @@ class MusicBeatState extends FNFUIState
 
 	public var curStep:Int = 0;
 	public var curBeat:Int = 0;
-
-	public var controls(get, never):OldControls;
-
-	inline function get_controls():OldControls
-		return PlayerSettings.player1.controls;
 
 	// class create event
 	override function create()
@@ -62,6 +55,7 @@ class MusicBeatState extends FNFUIState
 	}
 
 	public function keyEventPress(action:String, key:Int, state:KeyState) {}
+
 	public function keyEventRelease(action:String, key:Int, state:KeyState) {}
 
 	// class 'step' event
@@ -209,10 +203,6 @@ class MusicBeatSubState extends FlxSubState
 
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
-	private var controls(get, never):OldControls;
-
-	inline function get_controls():OldControls
-		return PlayerSettings.player1.controls;
 
 	override function create()
 	{
@@ -233,6 +223,7 @@ class MusicBeatSubState extends FlxSubState
 	}
 
 	public function keyEventPress(action:String, key:Int, state:KeyState) {}
+
 	public function keyEventRelease(action:String, key:Int, state:KeyState) {}
 
 	override function update(elapsed:Float)

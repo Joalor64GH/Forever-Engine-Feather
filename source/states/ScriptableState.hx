@@ -106,7 +106,6 @@ class ScriptableState extends MusicBeatState
 
 	function variableCalls()
 	{
-		scriptSet('controls', controls);
 		scriptSet('this', this);
 		scriptSet('add', add);
 		scriptSet('remove', remove);
@@ -222,7 +221,6 @@ class ScriptableSubstate extends MusicBeatSubState
 
 	function variableCalls()
 	{
-		scriptSet('controls', controls);
 		scriptSet('this', this);
 		scriptSet('add', add);
 		scriptSet('remove', remove);

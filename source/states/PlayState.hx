@@ -374,7 +374,7 @@ class PlayState extends MusicBeatState
 		// initialize ui elements
 		startingSong = true;
 		startedCountdown = true;
-		//canPause = false;
+		// canPause = false;
 
 		//
 		var downscroll = Init.trueSettings.get('Downscroll');
@@ -432,24 +432,12 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(dialogueHUD, false);
 
 		//
-		keysArray = [
-			copyKey(Init.gameControls.get('LEFT')[0]),
-			copyKey(Init.gameControls.get('DOWN')[0]),
-			copyKey(Init.gameControls.get('UP')[0]),
-			copyKey(Init.gameControls.get('RIGHT')[0])
-		];
-
-		if (!Init.trueSettings.get('Controller Mode'))
-		{
-			FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
-			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}
-
 		if (stageBuild.sendMessage)
 		{
 			if (stageBuild.messageText.length > 1)
 				logTrace(stageBuild.messageText, 3, true, dialogueHUD);
 		}
+		Controls.keyEventTrigger.add(keyEventTrigger);
 
 		Paths.clearUnusedMemory();
 
@@ -478,17 +466,16 @@ class PlayState extends MusicBeatState
 		return copiedArray;
 	}
 
-	var keysArray:Array<Dynamic>;
 	var keysHeld:Array<Bool> = [];
 
 	/*
-	* Main Input System Function
+	 * Main Input System Function
 	**/
-	public function inputHandler(key:Int, isPressed:Bool)
+	public function inputHandler(key:Int, state:KeyState)
 	{
-		keysHeld[key] = isPressed;
+		keysHeld[key] = (state == PRESSED);
 
-		if (isPressed)
+		if (state == PRESSED)
 		{
 			if (generatedMusic)
 			{
@@ -550,54 +537,46 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function onKeyPress(event:KeyboardEvent):Void
+	public function keyEventTrigger(action:String, key:Int, state:KeyState)
 	{
-		if (!bfStrums.autoplay && (FlxG.keys.checkStatus(event.keyCode, JUST_PRESSED)
-			|| Init.trueSettings.get('Controller Mode')) && (FlxG.keys.enabled)
-				&& !paused && (FlxG.state.active || FlxG.state.persistentUpdate))
-		{
-			var key:Int = getKeyFromEvent(event.keyCode);
-			if (key >= 0)
-				inputHandler(key, true);
-			callFunc('onKeyPress', [key]);
-		}
-	}
+		if (paused || bfStrums.autoplay)
+			return;
 
-	public function onKeyRelease(event:KeyboardEvent):Void
-	{
-		if (FlxG.keys.enabled && !paused && (FlxG.state.active || FlxG.state.persistentUpdate))
+		switch (action)
 		{
-			var key:Int = getKeyFromEvent(event.keyCode);
-			if (key >= 0)
-				inputHandler(key, false);
-			callFunc('onKeyRelease', [key]);
-		}
-	}
-
-	private function getKeyFromEvent(key:FlxKey):Int
-	{
-		if (key != NONE)
-		{
-			for (i in 0...keysArray.length)
-			{
-				for (j in 0...keysArray[i].length)
+			// RESET = Quick Game Over Screen
+			case "reset":
+				if (!startingSong && !isStoryMode)
+					health = 0;
+			case "autoplay":
+				if (!isStoryMode)
 				{
-					if (key == keysArray[i][j])
-						return i;
+					preventScoring = true;
+					bfStrums.autoplay = !bfStrums.autoplay;
+					uiHUD.autoplayMark.visible = bfStrums.autoplay;
+					uiHUD.scoreBar.visible = !bfStrums.autoplay;
 				}
-			}
+			case "debug":
+				if (!isStoryMode && !startingSong)
+				{
+					resetMusic();
+					if (FlxG.keys.pressed.SHIFT)
+						Main.switchState(this, new states.charting.ChartingState());
+					else
+						Main.switchState(this, new states.charting.OriginalChartingState());
+					preventScoring = true;
+				}
+			case "left" | "down" | "up" | "right":
+				var actions = ["left", "down", "up", "right"];
+				var index = actions.indexOf(action);
+				inputHandler(index, state);
 		}
-		return -1;
+		callFunc(state == PRESSED ? 'onKeyPress' : 'onKeyRelease', [action]);
 	}
 
 	override public function destroy()
 	{
-		if (!Init.trueSettings.get('Controller Mode'))
-		{
-			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
-			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
-		}
-
+		Controls.keyEventTrigger.remove(keyEventTrigger);
 		super.destroy();
 	}
 
@@ -670,29 +649,6 @@ class PlayState extends MusicBeatState
 				stopTimers();
 				// open pause substate
 				openSubState(new states.substates.PauseSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-			}
-
-			// make sure you're not cheating lol
-			if (!isStoryMode)
-			{
-				// charting state (more on that later)
-				if ((Controls.getPressEvent("debug")) && (!startingSong))
-				{
-					resetMusic();
-					if (FlxG.keys.pressed.SHIFT)
-						Main.switchState(this, new states.charting.ChartingState());
-					else
-						Main.switchState(this, new states.charting.OriginalChartingState());
-					preventScoring = true;
-				}
-
-				if (Controls.getPressEvent("autoplay"))
-				{
-					preventScoring = true;
-					bfStrums.autoplay = !bfStrums.autoplay;
-					uiHUD.autoplayMark.visible = bfStrums.autoplay;
-					uiHUD.scoreBar.visible = !bfStrums.autoplay;
-				}
 			}
 
 			Conductor.songPosition += elapsed * 1000;
@@ -774,12 +730,6 @@ class PlayState extends MusicBeatState
 			for (hud in allUIs)
 				hud.angle = FlxMath.lerp(0 + forceZoom[3], hud.angle, easeLerp);
 
-			// Controls
-
-			// RESET = Quick Game Over Screen
-			if (Controls.getPressEvent("reset") && !startingSong && !isStoryMode)
-				health = 0;
-
 			deathCheck();
 
 			// spawn in the notes from the array
@@ -798,11 +748,8 @@ class PlayState extends MusicBeatState
 			}
 
 			noteCalls();
-
-			if (Init.trueSettings.get('Controller Mode'))
-				controllerInput();
-
 			parseEventColumn();
+
 			callFunc('postUpdate', [elapsed]);
 		}
 	}
@@ -832,32 +779,6 @@ class PlayState extends MusicBeatState
 			return true;
 		}
 		return false;
-	}
-
-	// maybe theres a better place to put this, idk -saw
-	function controllerInput()
-	{
-		var justPressArray:Array<Bool> = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
-
-		var justReleaseArray:Array<Bool> = [controls.LEFT_R, controls.DOWN_R, controls.UP_R, controls.RIGHT_R];
-
-		if (justPressArray.contains(true))
-		{
-			for (i in 0...justPressArray.length)
-			{
-				if (justPressArray[i])
-					onKeyPress(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, true, -1, keysArray[i][0]));
-			}
-		}
-
-		if (justReleaseArray.contains(true))
-		{
-			for (i in 0...justReleaseArray.length)
-			{
-				if (justReleaseArray[i])
-					onKeyRelease(new KeyboardEvent(KeyboardEvent.KEY_UP, true, true, -1, keysArray[i][0]));
-			}
-		}
 	}
 
 	function noteCalls()
@@ -2299,7 +2220,6 @@ class PlayState extends MusicBeatState
 
 		setVar('curBeat', curBeat);
 		setVar('curStep', curStep);
-		setVar('controls', controls);
 
 		setVar('set', function(key:String, value:Dynamic)
 		{

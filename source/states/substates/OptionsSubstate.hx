@@ -352,9 +352,6 @@ class OptionsSubstate extends MusicBeatSubState
 				// set the new key for the selected action;
 				Controls.setActionKey(keyText, curHorizontalSelection, checkKey);
 
-				// refresh keys
-				controls.setKeyboardScheme(None, false);
-
 				// close the submenu
 				closeSubmenu();
 			}

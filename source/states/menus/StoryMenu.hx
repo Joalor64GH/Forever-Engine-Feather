@@ -202,27 +202,21 @@ class StoryMenu extends MusicBeatState
 
 		if (!movedBack)
 		{
+			var ui_up = Controls.getPressEvent("ui_up");
+			var ui_down = Controls.getPressEvent("ui_down");
+			var ui_left = Controls.getPressEvent("ui_left");
+			var ui_right = Controls.getPressEvent("ui_right");
+			var ui_leftP = Controls.getPressEvent("ui_left", "pressed");
+			var ui_rightP = Controls.getPressEvent("ui_right", "pressed");
+
 			if (!selectedWeek)
 			{
-				if (Controls.getPressEvent("ui_up"))
-					changeWeek(-1);
-				else if (Controls.getPressEvent("ui_down"))
-					changeWeek(1);
+				changeWeek(ui_up ? -1 : ui_down ? 1 : 0);
 
-				if (Controls.getPressEvent("ui_right", "pressed"))
-					rightArrow.animation.play('press')
-				else
-					rightArrow.animation.play('idle');
+				leftArrow.animation.play(ui_leftP ? 'press' : 'idle');
+				rightArrow.animation.play(ui_rightP ? 'press' : 'idle');
 
-				if (Controls.getPressEvent("ui_left", "pressed"))
-					leftArrow.animation.play('press');
-				else
-					leftArrow.animation.play('idle');
-
-				if (Controls.getPressEvent("ui_right"))
-					changeDifficulty(1);
-				if (Controls.getPressEvent("ui_left"))
-					changeDifficulty(-1);
+				changeDifficulty(ui_left ? -1 : ui_right ? 1 : 0);
 			}
 
 			if (Controls.getPressEvent("accept"))
@@ -356,7 +350,8 @@ class StoryMenu extends MusicBeatState
 			bullShit++;
 		}
 
-		FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
+		if (change != 0)
+			FlxG.sound.play(Paths.sound('base/menus/scrollMenu'));
 
 		updateText();
 	}

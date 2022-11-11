@@ -100,7 +100,6 @@ class MainMenu extends MusicBeatState
 		mainScript.set('add', add);
 		mainScript.set('remove', remove);
 		mainScript.set('this', this);
-		mainScript.set('controls', controls);
 		mainScript.set('menuCam', menuCam);
 		mainScript.set('menuHUD', menuHUD);
 

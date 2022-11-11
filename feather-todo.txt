@@ -1,8 +1,0 @@
-- Scripted Notetypes;
-- (Proper) Script Error Handling;
-
-[LOW PRIORITY]
-- Mods Folder and proper Mod Support
-
-// Contributors, in case you wanna go ahead and try any of these, feel free;
-// ...in case you wanna make this not be a text file, feel free too;

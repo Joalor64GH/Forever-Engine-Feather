@@ -83,7 +83,7 @@ class Timings
 
 		ratingFinal = "N/A";
 		comboDisplay = "";
-		//updateRanking();
+		// updateRanking();
 	}
 
 	public static function updateAccuracy(judgement:Int, ?isSustain:Bool = false, ?segmentCount:Int = 1)

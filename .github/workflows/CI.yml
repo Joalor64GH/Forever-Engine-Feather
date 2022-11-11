@@ -29,6 +29,7 @@ jobs:
           haxelib install flixel-addons
           haxelib install haxe-strings
           haxelib install hscript
+          haxelib install hxcpp-debug-server
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git polymod https://github.com/MasterEric/polymod
@@ -63,6 +64,7 @@ jobs:
           haxelib install flixel-addons
           haxelib install haxe-strings
           haxelib install hscript
+          haxelib install hxcpp-debug-server
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git polymod https://github.com/MasterEric/polymod
@@ -98,6 +100,7 @@ jobs:
           haxelib install flixel-addons
           haxelib install haxe-strings
           haxelib install hscript
+          haxelib install hxcpp-debug-server
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib git polymod https://github.com/MasterEric/polymod

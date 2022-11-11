@@ -21,9 +21,12 @@ class Controls
 	//
 	public static var keyPressed:Event<KeyCall> = new Event<KeyCall>();
 	public static var keyReleased:Event<KeyCall> = new Event<KeyCall>();
+	public static var keyTriggered:Event<KeyCall> = new Event<KeyCall>();
 
 	public static var keyEventPress:Event<BindCall> = new Event<BindCall>();
 	public static var keyEventRelease:Event<BindCall> = new Event<BindCall>();
+	// used by playstate for main controls;
+	public static var keyEventTrigger:Event<BindCall> = new Event<BindCall>();
 
 	public static var defaultActions:Map<String, Array<Key>> = [
 		// NOTE KEYS
@@ -74,11 +77,13 @@ class Controls
 			{
 				keysHeld.push(event.keyCode);
 				keyPressed.dispatch(event.keyCode, PRESSED);
+				keyTriggered.dispatch(event.keyCode, PRESSED);
 
 				for (key in catchKeys(event.keyCode))
 				{
 					keyEventPress.dispatch(key, event.keyCode, PRESSED);
-					//trace('Pressed Key: ' + key);
+					keyEventTrigger.dispatch(key, event.keyCode, PRESSED);
+					// trace('Pressed Key: ' + key);
 				}
 			}
 		}
@@ -93,11 +98,13 @@ class Controls
 			{
 				keysHeld.remove(event.keyCode);
 				keyReleased.dispatch(event.keyCode, RELEASED);
+				keyTriggered.dispatch(event.keyCode, RELEASED);
 
 				for (key in catchKeys(event.keyCode))
 				{
 					keyEventRelease.dispatch(key, event.keyCode, RELEASED);
-					//trace('Released Key: ' + key);
+					keyEventTrigger.dispatch(key, event.keyCode, RELEASED);
+					// trace('Released Key: ' + key);
 				}
 			}
 		}
@@ -159,7 +166,7 @@ class Controls
 		if (actions.exists(action))
 		{
 			actions.set(action, keys);
-			//trace('binded $action to ID $keys');
+			// trace('binded $action to ID $keys');
 		}
 	}
 
@@ -169,7 +176,7 @@ class Controls
 		if (actions.exists(action))
 		{
 			actions.get(action)[id] = key;
-			//trace(actions.get(action)[id]);
+			// trace(actions.get(action)[id]);
 		}
 	}
 }

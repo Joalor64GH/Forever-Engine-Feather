@@ -299,8 +299,7 @@ class Init extends FlxState
 	{
 		FlxG.save.bind('gameSettings', "Feather");
 
-		// initialize controls and highscore
-		PlayerSettings.init();
+		// load controls and highscore
 		Highscore.load();
 		loadControls();
 
