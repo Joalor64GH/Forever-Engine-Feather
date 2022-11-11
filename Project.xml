@@ -87,7 +87,7 @@
 	<haxedef name="HXCPP_STACK_LINE" if="release" />
 
 	<!-- Use defines to configure the behavior of Polymod. -->
-	<section if="MODCORE_ALLOWED">
+	<section if="MODS_ALLOWED">
 		<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
 		<haxedef name="POLYMOD_MOD_PACK_FILE" value="modPack.txt" />
 		<haxedef name="POLYMOD_MOD_METADATA_FILE" value="modData.json" />
