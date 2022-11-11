@@ -15,7 +15,7 @@ class FeatherSprite extends FlxSprite
 	public var copyParentAlpha:Bool = false;
 	public var copyParentVisib:Bool = false;
 
-	public function new(fileName:String, fileFolder:String, fileAnim:String, ?looped:Bool = false)
+	public function new(fileName:String, ?fileFolder:String, ?fileAnim:String, ?looped:Bool = false)
 	{
 		super();
 

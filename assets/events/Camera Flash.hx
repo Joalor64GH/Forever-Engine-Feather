@@ -1,11 +1,11 @@
-function eventTrigger(value1, value2, value3)
+function eventTrigger(params)
 {
-	var timer:Float = Std.parseFloat(value2);
+	var timer:Float = Std.parseFloat(params[1]);
 	if (Math.isNaN(timer) || timer <= 0)
 		timer = 0.6;
-	if (value1 == null)
-		value1 = 'white';
-	FlxG.camera.flash(ForeverTools.returnColor('$value1'), timer);
+	if (params[0] == null)
+		params[0] = 'white';
+	FlxG.camera.flash(ForeverTools.returnColor(params[0]), timer);
 }
 
 function returnDescription()

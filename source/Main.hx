@@ -100,7 +100,7 @@ class Main extends Sprite
 		gameWeeks.push('myWeek');
 	}
 
-	public static function loadGameWeeks(isStory:Bool = false)
+	public static function loadGameWeeks(isStory:Bool)
 	{
 		gameWeeksMap.clear();
 		gameWeeks = [];
@@ -113,8 +113,8 @@ class Main extends Sprite
 				var week:GameWeek = parseGameWeeks(Paths.file('weeks/' + weekList[i] + '.json'));
 				if (week != null)
 				{
-					if ((isStory && (!week.hideOnStory || !week.hideUntilUnlocked))
-						|| (!isStory && (!week.hideOnFreeplay || !week.hideUntilUnlocked)))
+					if ((isStory && (!week.hideOnStory && !week.hideUntilUnlocked))
+						|| (!isStory && (!week.hideOnFreeplay && !week.hideUntilUnlocked)))
 					{
 						gameWeeksMap.set(weekList[i], week);
 						gameWeeks.push(weekList[i]);
@@ -233,6 +233,7 @@ class Main extends Sprite
 			return;
 		}
 		FlxTransitionableState.skipNextTransIn = false;
+		FlxTransitionableState.skipNextTransOut = false;
 		// load the state
 		FlxG.switchState(target);
 	}

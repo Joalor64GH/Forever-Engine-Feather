@@ -160,7 +160,7 @@ class Controls
 		return false;
 	}
 
-	public static function setKeys(action:String, keys:Array<Key>)
+	public static function addActionKey(action:String, keys:Array<Key>)
 	{
 		//
 		if (actions.exists(action))

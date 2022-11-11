@@ -1,6 +1,6 @@
-function eventTrigger(value1, value2, value3)
+function eventTrigger(params)
 {
-	var speed:Int = Std.parseInt(value1);
+	var speed:Int = Std.parseInt(params[0]);
 	if (Math.isNaN(speed) || speed <= 0)
 		speed = 1;
 	PlayState.gfSpeed = speed;

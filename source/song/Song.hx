@@ -57,7 +57,7 @@ class Song
 				noteSkin: oldSong.noteSkin,
 				needsVoices: oldSong.needsVoices,
 				bpm: oldSong.bpm,
-				validScore: oldSong.validScore,
+				validScore: true,
 				assetModifiler: oldSong.assetModifier,
 				splashSkin: oldSong.splashSkin,
 				events: [],

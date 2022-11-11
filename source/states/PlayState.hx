@@ -157,8 +157,6 @@ class PlayState extends MusicBeatState
 
 	public var gfSpeed:Int = 1;
 
-	public static var preventScoring:Bool = true;
-
 	function resetStatics()
 	{
 		Timings.resetAccuracy();
@@ -179,8 +177,7 @@ class PlayState extends MusicBeatState
 		assetModifier = 'base';
 		changeableSkin = 'default';
 
-		if (!preventScoring)
-			preventScoring = false;
+		PlayState.SONG.validScore = true;
 	}
 
 	function checkTween(isDad:Bool = false):Bool
@@ -551,7 +548,7 @@ class PlayState extends MusicBeatState
 			case "autoplay":
 				if (!isStoryMode)
 				{
-					preventScoring = true;
+					PlayState.SONG.validScore = false;
 					bfStrums.autoplay = !bfStrums.autoplay;
 					uiHUD.autoplayMark.visible = bfStrums.autoplay;
 					uiHUD.scoreBar.visible = !bfStrums.autoplay;
@@ -564,7 +561,7 @@ class PlayState extends MusicBeatState
 						Main.switchState(this, new states.charting.ChartingState());
 					else
 						Main.switchState(this, new states.charting.OriginalChartingState());
-					preventScoring = true;
+					PlayState.SONG.validScore = false;
 				}
 			case "left" | "down" | "up" | "right":
 				var actions = ["left", "down", "up", "right"];
@@ -1742,7 +1739,7 @@ class PlayState extends MusicBeatState
 
 		songMusic.volume = 0;
 		vocals.volume = 0;
-		if (SONG.validScore && !preventScoring)
+		if (SONG.validScore)
 			Highscore.saveScore(SONG.song, Timings.score, storyDifficulty);
 
 		deaths = 0;
@@ -1773,7 +1770,7 @@ class PlayState extends MusicBeatState
 				Main.switchState(this, new StoryMenu());
 
 				// save the week's score if the score is valid
-				if (SONG.validScore && !preventScoring)
+				if (SONG.validScore)
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 
 				// flush the save

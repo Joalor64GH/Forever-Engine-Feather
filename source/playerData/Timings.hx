@@ -16,8 +16,6 @@ class Timings
 	public static var accuracy:Float;
 	public static var trueAccuracy:Float;
 
-	public static var judgementRates:Array<Float>;
-
 	// from left to right
 	// max milliseconds, score from it and percentage
 	public static var judgementsMap:Map<String, Array<Dynamic>> = [
@@ -43,7 +41,6 @@ class Timings
 	];
 
 	public static var notesHit:Int = 0;
-	public static var segmentsHit:Int = 0;
 
 	public static var ratingFinal:String = "F";
 	public static var comboDisplay:String = "";
@@ -58,7 +55,6 @@ class Timings
 		// reset the accuracy to 0%
 		accuracy = 0.001;
 		trueAccuracy = 0;
-		judgementRates = new Array<Float>();
 
 		// reset ms threshold
 		var biggestThreshold:Float = 0;
@@ -73,7 +69,6 @@ class Timings
 		smallestRating = 'sick';
 
 		notesHit = 0;
-		segmentsHit = 0;
 		perfectCombo = true;
 
 		// reset score;

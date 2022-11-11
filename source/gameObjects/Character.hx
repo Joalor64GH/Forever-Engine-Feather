@@ -254,9 +254,9 @@ class Character extends FNFSprite
 			{
 				case 'gf':
 					if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-						playAnim('danceRight');
+						playAnim('danceRight$idleSuffix');
 					if ((animation.curAnim.name.startsWith('sad')) && (animation.curAnim.finished))
-						playAnim('danceLeft');
+						playAnim('danceLeft$idleSuffix');
 			}
 
 			// Post idle animation (think Week 4 and how the player and mom's hair continues to sway after their idle animations are done!)
@@ -307,12 +307,12 @@ class Character extends FNFSprite
 					{
 						danced = !danced;
 						if (danced)
-							playAnim('danceRight', forced);
+							playAnim('danceRight$idleSuffix', forced);
 						else
-							playAnim('danceLeft', forced);
+							playAnim('danceLeft$idleSuffix', forced);
 					}
 					else
-						playAnim('idle', forced);
+						playAnim('idle$idleSuffix', forced);
 			}
 		}
 	}
@@ -525,10 +525,10 @@ class Character extends FNFSprite
 				i.call('loadAnimations', []);
 		}
 
-		if (animation.getByName('danceLeft') != null)
-			playAnim('danceLeft');
+		if (animation.getByName('danceLeft$idleSuffix') != null)
+			playAnim('danceLeft$idleSuffix');
 		else
-			playAnim('idle');
+			playAnim('idle$idleSuffix');
 	}
 
 	public function setVar(key:String, value:Dynamic)
@@ -624,10 +624,10 @@ class Character extends FNFSprite
 			updateHitbox();
 		}
 
-		if (animation.getByName('danceLeft') != null)
-			playAnim('danceLeft');
+		if (animation.getByName('danceLeft$idleSuffix') != null)
+			playAnim('danceLeft$idleSuffix');
 		else
-			playAnim('idle');
+			playAnim('idle$idleSuffix');
 
 		characterData.camOffsets = [json.camera_position[0], json.camera_position[1]];
 		setPosition(json.position[0], json.position[1]);
