@@ -119,7 +119,7 @@ class Paths
 		localTrackedAssets = [];
 	}
 
-	public static function returnGraphic(key:String, ?folder:String, ?library:String, ?textureCompression:Bool = false)
+	public static function returnGraphic(key:String, ?folder:String, ?library:String, ?gpuRender:Bool = false)
 	{
 		var path = getPath(folder.length > 1 ? '$folder/$key.png' : '$key.png', IMAGE, library);
 		if (openfl.Assets.exists(path))
@@ -128,7 +128,7 @@ class Paths
 			{
 				var bitmap = BitmapData.fromFile(path);
 				var newGraphic:FlxGraphic;
-				if (textureCompression)
+				if (gpuRender)
 				{
 					var texture = FlxG.stage.context3D.createTexture(bitmap.width, bitmap.height, BGRA, true, 0);
 					texture.uploadFromBitmapData(bitmap);
@@ -142,6 +142,7 @@ class Paths
 				{
 					newGraphic = FlxGraphic.fromBitmapData(bitmap, false, key, false);
 				}
+				newGraphic.persist = true;
 				currentTrackedAssets.set(key, newGraphic);
 			}
 			localTrackedAssets.push(key);
@@ -289,9 +290,9 @@ class Paths
 		return inst;
 	}
 
-	inline static public function image(key:String, folder:String = 'images', ?library:String, ?textureCompression:Bool = false)
+	inline static public function image(key:String, folder:String = 'images', ?library:String, ?gpuRender:Bool = false)
 	{
-		var returnAsset:FlxGraphic = returnGraphic(key, folder, library, textureCompression);
+		var returnAsset:FlxGraphic = returnGraphic(key, folder, library, gpuRender);
 		return returnAsset;
 	}
 
@@ -339,7 +340,7 @@ class Paths
 		{
 			case PSYCH_ENGINE:
 				extension = '.json';
-			case UNDERSCORE | FOREVER_FEATHER:
+			case FOREVER_FEATHER:
 				// this is diabolic;
 				for (j in scriptExts)
 				{

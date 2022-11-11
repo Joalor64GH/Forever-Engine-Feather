@@ -25,6 +25,7 @@ class ScriptHandler extends SScript
 		set('FlxObject', flixel.FlxObject);
 		set('FlxSprite', flixel.FlxSprite);
 		set('FlxSound', flixel.system.FlxSound);
+		set('FlxText', flixel.text.FlxText);
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);
 		set('FlxEase', flixel.tweens.FlxEase);
@@ -50,7 +51,9 @@ class ScriptHandler extends SScript
 
 		// CLASSES (FEATHER);
 		set('ScriptableState', states.ScriptableState);
+		set('ScriptableSubstate', states.ScriptableState.ScriptableSubstate);
 		set('FeatherSprite', dependency.FeatherSprite);
+		set('Controls', base.input.Controls);
 
 		// OTHER
 		set('GraphicsShader', openfl.display.GraphicsShader);

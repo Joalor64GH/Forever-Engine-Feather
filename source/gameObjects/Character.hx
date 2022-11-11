@@ -18,8 +18,7 @@ using StringTools;
 
 enum abstract CharacterOrigin(String) to String
 {
-	var UNDERSCORE;
-	var FOREVER_FEATHER; // need to come up with a format for this, maybe.
+	var FOREVER_FEATHER;
 	var PSYCH_ENGINE;
 	var FUNKIN_COCOA;
 }
@@ -28,10 +27,8 @@ typedef CharacterData =
 {
 	var flipX:Bool;
 	var flipY:Bool;
-	var offsetX:Float;
-	var offsetY:Float;
-	var camOffsetX:Float;
-	var camOffsetY:Float;
+	var offsets:Array<Float>;
+	var camOffsets:Array<Float>;
 	var quickDancer:Bool;
 	var singDuration:Float;
 	var headBopSpeed:Int;
@@ -41,6 +38,7 @@ typedef CharacterData =
 	var noteSkin:String;
 	var splashSkin:String;
 	var assetModifier:String;
+	var missColor:Array<Int>; // for fake misses;
 	var icon:String;
 }
 
@@ -59,7 +57,7 @@ class Character extends FNFSprite
 	public var hasMissAnims:Bool = false;
 	public var danceIdle:Bool = false;
 
-	public var characterType:String = UNDERSCORE;
+	public var characterType:String = FOREVER_FEATHER;
 	public var characterData:CharacterData;
 
 	public var characterScripts:Array<ScriptHandler> = [];
@@ -80,20 +78,19 @@ class Character extends FNFSprite
 		characterData = {
 			flipX: isPlayer,
 			flipY: false,
-			offsetY: 0,
-			offsetX: 0,
-			camOffsetY: 0,
-			camOffsetX: 0,
+			antialiasing: true,
+			quickDancer: false,
+			offsets: [0, 0],
+			camOffsets: [0, 0],
 			singDuration: 4,
 			headBopSpeed: 2,
 			healthColor: [255, 255, 255],
-			antialiasing: true,
+			missColor: [112, 105, 255],
 			adjustPos: !character.startsWith('gf'),
 			noteSkin: "NOTE_assets",
-			splashSkin: 'noteSplashes',
+			splashSkin: "noteSplashes",
 			assetModifier: "base",
-			icon: null,
-			quickDancer: false
+			icon: null
 		};
 
 		if (characterData.icon == null)
@@ -124,9 +121,8 @@ class Character extends FNFSprite
 					addOffset("singDOWN", 17, -375);
 					addOffset("singUP", 8, -334);
 					addOffset("singRIGHT", 50, -348);
-					characterData.camOffsetX = 30;
-					characterData.camOffsetY = 330;
-					characterData.offsetY = -350;
+					characterData.camOffsets = [30, 330];
+					characterData.offsets = [0, -350];
 				}
 				else
 				{
@@ -135,7 +131,7 @@ class Character extends FNFSprite
 					addOffset("singDOWN", -48, -31);
 					addOffset("singUP", -45, 11);
 					addOffset("singRIGHT", -61, -14);
-					characterData.camOffsetY = -5;
+					characterData.camOffsets = [0, -5];
 					characterData.flipX = false;
 				}
 
@@ -149,7 +145,7 @@ class Character extends FNFSprite
 				{
 					try
 					{
-						generateUnderscoreChar(character); // old system, for now i guess;
+						generateChar(character); // old system, for now i guess;
 					}
 					catch (e)
 					{
@@ -187,8 +183,8 @@ class Character extends FNFSprite
 
 		if (characterData.adjustPos)
 		{
-			x += characterData.offsetX;
-			y += (characterData.offsetY - (frameHeight * scale.y));
+			x += characterData.offsets[0];
+			y += (characterData.offsets[1] - (frameHeight * scale.y));
 		}
 
 		this.x = x;
@@ -376,10 +372,10 @@ class Character extends FNFSprite
 	}
 
 	/**
-	 * [Generates a Character in the Forever Engine Underscore Format]
+	 * [Generates a Character in the Forever Engine Feather Format]
 	 * @param char returns the character that should be generated
 	 */
-	function generateUnderscoreChar(char:String = 'bf')
+	function generateChar(char:String = 'bf')
 	{
 		var pushedChars:Array<String> = [];
 
@@ -388,7 +384,7 @@ class Character extends FNFSprite
 
 		if (!pushedChars.contains(char))
 		{
-			var script:ScriptHandler = new ScriptHandler(Paths.characterModule(char, 'config', UNDERSCORE));
+			var script:ScriptHandler = new ScriptHandler(Paths.characterModule(char, 'config', FOREVER_FEATHER));
 
 			if (script.interp == null)
 				trace("Something terrible occured! Skipping.");
@@ -462,14 +458,12 @@ class Character extends FNFSprite
 
 		setVar('setOffsets', function(x:Float = 0, y:Float = 0)
 		{
-			characterData.offsetX = x;
-			characterData.offsetY = y;
+			characterData.offsets = [x, y];
 		});
 
 		setVar('setCamOffsets', function(x:Float = 0, y:Float = 0)
 		{
-			characterData.camOffsetX = x;
-			characterData.camOffsetY = y;
+			characterData.camOffsets = [x, y];
 		});
 
 		setVar('setScale', function(?x:Float = 1, ?y:Float = 1)
@@ -622,6 +616,8 @@ class Character extends FNFSprite
 		characterData.healthColor = json.healthbar_colors;
 		characterData.singDuration = json.sing_duration;
 
+		characterData.adjustPos = true;
+
 		if (json.scale != 1)
 		{
 			setGraphicSize(Std.int(width * json.scale));
@@ -633,9 +629,7 @@ class Character extends FNFSprite
 		else
 			playAnim('idle');
 
-		characterData.camOffsetX = json.camera_position[0];
-		characterData.camOffsetY = json.camera_position[1];
-
+		characterData.camOffsets = [json.camera_position[0], json.camera_position[1]];
 		setPosition(json.position[0], json.position[1]);
 
 		return this;

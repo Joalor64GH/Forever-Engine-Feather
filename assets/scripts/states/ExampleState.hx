@@ -15,7 +15,7 @@ function postCreate()
 
 function update(elapsed:Float)
 {
-	if (controls.BACK)
+	if (Controls.getPressEvent("back"))
 		Main.switchState(this, new MainMenu());
 }
 

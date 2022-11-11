@@ -1,4 +1,4 @@
-function eventNoteHit(value1, value2, value3)
+function eventTrigger(value1, value2, value3)
 {
 	var timer:Float = Std.parseFloat(value2);
 	if (Math.isNaN(timer) || timer <= 0)

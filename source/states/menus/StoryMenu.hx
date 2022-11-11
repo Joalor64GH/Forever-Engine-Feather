@@ -1,5 +1,6 @@
 package states.menus;
 
+import base.input.Controls;
 import base.CoolUtil;
 import dependency.Discord;
 import flixel.FlxG;
@@ -203,32 +204,32 @@ class StoryMenu extends MusicBeatState
 		{
 			if (!selectedWeek)
 			{
-				if (controls.UI_UP_P)
+				if (Controls.getPressEvent("ui_up"))
 					changeWeek(-1);
-				else if (controls.UI_DOWN_P)
+				else if (Controls.getPressEvent("ui_down"))
 					changeWeek(1);
 
-				if (controls.UI_RIGHT)
+				if (Controls.getPressEvent("ui_right", "pressed"))
 					rightArrow.animation.play('press')
 				else
 					rightArrow.animation.play('idle');
 
-				if (controls.UI_LEFT)
+				if (Controls.getPressEvent("ui_left", "pressed"))
 					leftArrow.animation.play('press');
 				else
 					leftArrow.animation.play('idle');
 
-				if (controls.UI_RIGHT_P)
+				if (Controls.getPressEvent("ui_right"))
 					changeDifficulty(1);
-				if (controls.UI_LEFT_P)
+				if (Controls.getPressEvent("ui_left"))
 					changeDifficulty(-1);
 			}
 
-			if (controls.ACCEPT)
+			if (Controls.getPressEvent("accept"))
 				selectWeek();
 		}
 
-		if (controls.BACK && !movedBack && !selectedWeek)
+		if (Controls.getPressEvent("back") && !movedBack && !selectedWeek)
 		{
 			FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
 			movedBack = true;

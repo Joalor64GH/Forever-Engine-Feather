@@ -1,6 +1,7 @@
 package;
 
 import base.feather.ScriptHandler;
+import dependency.FNFSprite;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -22,8 +23,8 @@ using StringTools;
 class ForeverAssets
 {
 	//
-	public static function generateCombo(asset:String, number:String, allSicks:Bool, assetModifier:String = 'base', changeableSkin:String = 'default',
-			baseLibrary:String, negative:Bool, createdColor:FlxColor, scoreInt:Int):FlxSprite
+	public static function generateCombo(asset:String, assetGroup:FlxTypedGroup<FNFSprite>, number:String, allSicks:Bool, assetModifier:String = 'base',
+			changeableSkin:String = 'default', baseLibrary:String, negative:Bool, createdColor:FlxColor, scoreInt:Int):FNFSprite
 	{
 		var width = 100;
 		var height = 140;
@@ -33,28 +34,33 @@ class ForeverAssets
 			width = 10;
 			height = 12;
 		}
-		var comboNumbers:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary)),
-			true, width, height);
-		switch (assetModifier)
-		{
-			default:
-				comboNumbers.alpha = 1;
-				comboNumbers.screenCenter();
-				comboNumbers.x += (43 * scoreInt) + 20;
-				comboNumbers.y += 60;
+		var comboNumbers:FNFSprite;
 
-				comboNumbers.color = FlxColor.WHITE;
-				if (negative)
-					comboNumbers.color = createdColor;
+		if (assetGroup != null && Init.trueSettings.get('Judgement Recycling'))
+			comboNumbers = assetGroup.recycle(FNFSprite);
+		else
+			comboNumbers = new FNFSprite();
+		comboNumbers.loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary)), true, width, height);
+		comboNumbers.alpha = 1;
+		comboNumbers.screenCenter();
+		comboNumbers.x += (43 * scoreInt) + 20;
+		comboNumbers.y += 60;
 
-				comboNumbers.animation.add('base', [
-					(Std.parseInt(number) != null ? Std.parseInt(number) + 1 : 0) + (!allSicks ? 0 : 11)
-				], 0, false);
-				comboNumbers.animation.play('base');
-		}
+		comboNumbers.color = FlxColor.WHITE;
+		if (negative)
+			comboNumbers.color = createdColor;
+
+		comboNumbers.animation.add('base', [
+			(Std.parseInt(number) != null ? Std.parseInt(number) + 1 : 0) + (!allSicks ? 0 : 11)
+		], 0, false);
+		comboNumbers.animation.play('base');
+		comboNumbers.zDepth = -Conductor.songPosition;
 
 		if (assetModifier == 'pixel')
+		{
+			comboNumbers.antialiasing = false;
 			comboNumbers.setGraphicSize(Std.int(comboNumbers.width * PlayState.daPixelZoom));
+		}
 		else
 		{
 			comboNumbers.antialiasing = true;
@@ -71,8 +77,8 @@ class ForeverAssets
 		return comboNumbers;
 	}
 
-	public static function generateRating(asset:String, perfectSick:Bool, timing:String, assetModifier:String = 'base', changeableSkin:String = 'default',
-			baseLibrary:String):FlxSprite
+	public static function generateRating(asset:String, assetGroup:FlxTypedGroup<FNFSprite>, perfectSick:Bool, timing:String, assetModifier:String = 'base',
+			changeableSkin:String = 'default', baseLibrary:String):FNFSprite
 	{
 		var width = 500;
 		var height = 163;
@@ -81,29 +87,34 @@ class ForeverAssets
 			width = 72;
 			height = 32;
 		}
-		var judgement:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ForeverTools.returnSkinAsset('judgements', assetModifier, changeableSkin,
-			baseLibrary)), true, width, height);
-		switch (assetModifier)
+		var judgement:FNFSprite;
+		if (assetGroup != null && Init.trueSettings.get('Judgement Recycling'))
+			judgement = assetGroup.recycle(FNFSprite);
+		else
+			judgement = new FNFSprite();
+
+		judgement.loadGraphic(Paths.image(ForeverTools.returnSkinAsset('judgements', assetModifier, changeableSkin, baseLibrary)), true, width, height);
+		judgement.alpha = 1;
+		judgement.screenCenter();
+		judgement.x = (FlxG.width * 0.55) - 40;
+		judgement.y -= 60;
+		if (!Init.trueSettings.get('Simply Judgements'))
 		{
-			default:
-				judgement.alpha = 1;
-				judgement.screenCenter();
-				judgement.x = (FlxG.width * 0.55) - 40;
-				judgement.y -= 60;
-				if (!Init.trueSettings.get('Simply Judgements'))
-				{
-					judgement.acceleration.y = 550;
-					judgement.velocity.y = -FlxG.random.int(140, 175);
-					judgement.velocity.x = -FlxG.random.int(0, 10);
-				}
-				judgement.animation.add('base', [
-					Std.int((Timings.judgementsMap.get(asset)[0] * 2) + (perfectSick ? 0 : 2) + (timing == 'late' ? 1 : 0))
-				], 24, false);
-				judgement.animation.play('base');
+			judgement.acceleration.y = 550;
+			judgement.velocity.y = -FlxG.random.int(140, 175);
+			judgement.velocity.x = -FlxG.random.int(0, 10);
 		}
+		judgement.animation.add('base', [
+			Std.int((Timings.judgementsMap.get(asset)[0] * 2) + (perfectSick ? 0 : 2) + (timing == 'late' ? 1 : 0))
+		], 24, false);
+		judgement.animation.play('base');
+		judgement.zDepth = -Conductor.songPosition;
 
 		if (assetModifier == 'pixel')
+		{
+			judgement.antialiasing = false;
 			judgement.setGraphicSize(Std.int(judgement.width * PlayState.daPixelZoom * 0.7));
+		}
 		else
 		{
 			judgement.antialiasing = true;
@@ -117,13 +128,9 @@ class ForeverAssets
 			changeableSkin:String = 'default', baseLibrary:String, noteType:String = 'default', noteData:Int):NoteSplash
 	{
 		//
-		var tempSplash:NoteSplash = group.recycle(NoteSplash, function()
-		{
-			var noteSplash:NoteSplash = new NoteSplash(noteData);
-			return noteSplash;
-		});
-
-		var noteScript:ScriptHandler = Note.getNoteScript(noteType);
+		var tempSplash:NoteSplash = group.recycle(NoteSplash);
+		tempSplash.noteData = noteData;
+		tempSplash.zDepth = -Conductor.songPosition;
 
 		switch (assetModifier)
 		{
@@ -139,36 +146,25 @@ class ForeverAssets
 				tempSplash.setGraphicSize(Std.int(tempSplash.width * PlayState.daPixelZoom));
 
 			default:
-				if (noteScript != null)
-				{
-					noteScript.call('generateSplash', [tempSplash, noteData]);
-					noteScript.set('splashSkin', changeableSkin);
-					noteScript.set('assetModifier', assetModifier);
-				}
-				else
-				{
-					// trace('[SPLASH ERROR] Script: $noteType is null');
-					tempSplash.loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary, 'notetypes'),
-						'notetypes'), true, 210,
-						210);
-					tempSplash.animation.add('anim1', [
-						(noteData * 2 + 1),
-						8 + (noteData * 2 + 1),
-						16 + (noteData * 2 + 1),
-						24 + (noteData * 2 + 1),
-						32 + (noteData * 2 + 1)
-					], 24, false);
-					tempSplash.animation.add('anim2', [
-						(noteData * 2),
-						8 + (noteData * 2),
-						16 + (noteData * 2),
-						24 + (noteData * 2),
-						32 + (noteData * 2)
-					], 24, false);
-					tempSplash.animation.play('anim1');
-					tempSplash.addOffset('anim1', -20, -10);
-					tempSplash.addOffset('anim2', -20, -10);
-				}
+				tempSplash.loadGraphic(Paths.image(ForeverTools.returnSkinAsset(asset, assetModifier, changeableSkin, baseLibrary, 'notetypes'), 'notetypes'),
+					true, 210, 210);
+				tempSplash.animation.add('anim1', [
+					(noteData * 2 + 1),
+					8 + (noteData * 2 + 1),
+					16 + (noteData * 2 + 1),
+					24 + (noteData * 2 + 1),
+					32 + (noteData * 2 + 1)
+				], 24, false);
+				tempSplash.animation.add('anim2', [
+					(noteData * 2),
+					8 + (noteData * 2),
+					16 + (noteData * 2),
+					24 + (noteData * 2),
+					32 + (noteData * 2)
+				], 24, false);
+				tempSplash.animation.play('anim1');
+				tempSplash.addOffset('anim1', -20, -10);
+				tempSplash.addOffset('anim2', -20, -10);
 		}
 
 		return tempSplash;

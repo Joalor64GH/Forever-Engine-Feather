@@ -1,4 +1,4 @@
-function eventNoteHit(params)
+function eventTrigger(params)
 {
 	var timer:Float = Std.parseFloat(params[1]);
 	if (Math.isNaN(timer) || timer <= 0)

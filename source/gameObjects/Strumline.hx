@@ -88,6 +88,7 @@ class Strumline extends FlxSpriteGroup
 	public var doTween:Bool = true;
 	public var autoplay:Bool = true;
 	public var displayJudges:Bool = false;
+	public var downscroll:Bool = false;
 
 	public var keyAmount:Int = 4;
 	public var xPos:Float = 0;
@@ -115,6 +116,7 @@ class Strumline extends FlxSpriteGroup
 		this.displayJudges = displayJudges;
 		this.receptorFrames = receptorFrames;
 		this.assetModifier = assetModifier;
+		this.downscroll = downscroll;
 
 		this.xPos = xPos;
 		this.keyAmount = keyAmount;

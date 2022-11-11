@@ -145,7 +145,7 @@ class OriginalChartingState extends MusicBeatState
 		generateHeads();
 
 		FlxG.mouse.visible = true;
-		FlxG.save.bind('funkin', 'ninjamuffin99');
+		FlxG.save.bind('chartSettings', "Feather");
 
 		tempBpm = _song.bpm;
 

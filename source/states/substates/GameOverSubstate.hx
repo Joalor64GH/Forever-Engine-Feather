@@ -7,6 +7,7 @@ import flixel.util.FlxTimer;
 import gameObjects.Boyfriend;
 import song.Conductor;
 import song.MusicBeat.MusicBeatSubState;
+import base.input.Controls;
 
 class GameOverSubstate extends MusicBeatSubState
 {
@@ -58,10 +59,10 @@ class GameOverSubstate extends MusicBeatSubState
 	{
 		super.update(elapsed);
 
-		if (controls.ACCEPT)
+		if (Controls.getPressEvent("accept"))
 			endBullshit();
 
-		if (controls.BACK)
+		if (Controls.getPressEvent("back"))
 		{
 			FlxG.sound.music.stop();
 			PlayState.deaths = 0;

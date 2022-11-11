@@ -194,6 +194,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	public function dadPosition(curStage:String, boyfriend:Character, gf:Character, dad:Character, camPos:FlxPoint):Void
 	{
+		callFunc('postCreate', [boyfriend, gf, dad, camPos]);
 		callFunc('dadPosition', [boyfriend, gf, dad, camPos]);
 	}
 
@@ -207,16 +208,19 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	public function stageUpdate(curBeat:Int, boyfriend:Character, gf:Character, dad:Character)
 	{
+		callFunc('beatHit', [curBeat, boyfriend, gf, dad]);
 		callFunc('updateStage', [curBeat, boyfriend, gf, dad]);
 	}
 
 	public function stageUpdateSteps(curStep:Int, boyfriend:Character, gf:Character, dad:Character)
 	{
+		callFunc('stepHit', [curStep, boyfriend, gf, dad]);
 		callFunc('updateStageSteps', [curStep, boyfriend, gf, dad]);
 	}
 
 	public function stageUpdateConstant(elapsed:Float, boyfriend:Character, gf:Character, dad:Character)
 	{
+		callFunc('update', [elapsed, boyfriend, gf, dad]);
 		callFunc('updateStageConst', [elapsed, boyfriend, gf, dad]);
 	}
 
@@ -294,6 +298,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			return gottenObject;
 		});
 
+		callFunc('create', []);
 		callFunc('generateStage', []);
 	}
 

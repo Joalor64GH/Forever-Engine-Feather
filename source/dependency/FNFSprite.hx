@@ -14,6 +14,7 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 class FNFSprite extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
+	public var zDepth:Float = 0;
 
 	public function new(x:Float = 0, y:Float = 0)
 	{
@@ -22,6 +23,17 @@ class FNFSprite extends FlxSprite
 		animOffsets = new Map<String, Array<Dynamic>>();
 
 		antialiasing = !Init.trueSettings.get('Disable Antialiasing');
+	}
+
+	/*
+	 * Sorts through the Object's zDepth value and returns the object in a given order;
+	 * @author Yoshubs;
+	 */
+	public static inline function depthSorting(Order:Int, Obj1:FNFSprite, Obj2:FNFSprite)
+	{
+		if (Obj1.zDepth > Obj2.zDepth)
+			return -Order;
+		return Order;
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void

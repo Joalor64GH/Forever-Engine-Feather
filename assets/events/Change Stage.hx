@@ -1,4 +1,4 @@
-function eventPreload(params)
+function loadedEventAction(params)
 {
 	var newStage:Stage = new Stage(params[0]);
 	PlayState.stageGroup.add(newStage);
@@ -9,7 +9,7 @@ function eventPreload(params)
 	});
 }
 
-function eventNoteHit(params)
+function eventTrigger(params)
 {
 	var changeTimer:FlxTimer;
 	var timer:Float = Std.parseFloat(params[1]);
