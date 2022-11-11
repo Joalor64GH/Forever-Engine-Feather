@@ -178,7 +178,7 @@ class Main extends Sprite
 
 		// here we set up the base game
 		var gameCreate:FlxGame;
-		gameCreate = new FlxGame(gameWidth, gameHeight, Init, zoom, framerate, framerate, skipSplash);
+		gameCreate = new FlxGame(gameWidth, gameHeight, Init, #if (flixel < "5.0.0") zoom, #end framerate, framerate, skipSplash);
 		addChild(gameCreate); // and create it afterwards
 
 		// begin the discord rich presence
@@ -196,6 +196,15 @@ class Main extends Sprite
 		infoConsole = new Console();
 		addChild(infoConsole);
 		#end
+
+		FlxG.stage.application.window.onClose.add(function()
+		{
+			#if DISCORD_RPC
+			Discord.shutdownRPC();
+			#end
+			Sys.exit(1);
+			base.input.Controls.destroy();
+		});
 	}
 
 	public static function framerateAdjust(input:Float)
@@ -292,10 +301,5 @@ class Main extends Sprite
 			Sys.println("No crash dialog found! Making a simple alert instead...");
 			Application.current.window.alert(errMsg, "Error!");
 		}
-
-		#if DISCORD_RPC
-		Discord.shutdownRPC();
-		#end
-		Sys.exit(1);
 	}
 }

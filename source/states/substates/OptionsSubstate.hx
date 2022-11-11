@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import gameObjects.gameFonts.Alphabet;
 import song.MusicBeat.MusicBeatSubState;
+import base.input.Controls;
 
 using StringTools;
 
@@ -214,8 +215,8 @@ class OptionsSubstate extends MusicBeatSubState
 
 	private function updateHorizontalSelection()
 	{
-		var left = controls.UI_LEFT_P;
-		var right = controls.UI_RIGHT_P;
+		var left = Controls.getPressEvent("ui_left");
+		var right = Controls.getPressEvent("ui_right");
 		var horizontalControl:Array<Bool> = [left, false, right];
 
 		if (horizontalControl.contains(true))
@@ -249,10 +250,10 @@ class OptionsSubstate extends MusicBeatSubState
 
 		if (!submenuOpen)
 		{
-			var up = controls.UI_UP;
-			var down = controls.UI_DOWN;
-			var up_p = controls.UI_UP_P;
-			var down_p = controls.UI_DOWN_P;
+			var up = Controls.getPressEvent("ui_up", "pressed");
+			var down = Controls.getPressEvent("ui_down", "pressed");
+			var up_p = Controls.getPressEvent("ui_up");
+			var down_p = Controls.getPressEvent("ui_down");
 			var controlArray:Array<Bool> = [up, down, up_p, down_p];
 
 			if (controlArray.contains(true))
@@ -280,7 +281,7 @@ class OptionsSubstate extends MusicBeatSubState
 			//
 			updateHorizontalSelection();
 
-			if (controls.ACCEPT)
+			if (Controls.getPressEvent("accept"))
 			{
 				FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 				submenuOpen = true;
@@ -291,7 +292,7 @@ class OptionsSubstate extends MusicBeatSubState
 						openSubmenu();
 				});
 			}
-			else if (controls.BACK)
+			else if (Controls.getPressEvent("back"))
 				close();
 		}
 		else
@@ -342,33 +343,14 @@ class OptionsSubstate extends MusicBeatSubState
 				// loop through existing keys and see if there are any alike
 				var checkKey = FlxG.keys.getIsDown()[0].ID;
 
-				// check if any keys use the same key lol
-				/*
-					for (i in 0...otherKeys.members.length)	{
-						if (otherKeys.members[i].text == checkKey.toString())
-						{
-							// switch them I guess???
-							var oldKey = Init.gameControls.get(keyOptions.members[curSelection].text)[0][curHorizontalSelection];
-							Init.gameControls.get(keyOptions.members[otherKeys.members[i].controlGroupID].text)[0][otherKeys.members[i].extensionJ] = oldKey;
-							otherKeys.members[i].text = getStringKey(oldKey);
-						}
-					}
-				 */
-
 				// now check if its the key we want to change
 				Init.gameControls.get(keyOptions.members[curSelection].text)[0][curHorizontalSelection] = checkKey;
 				otherKeys.members[(curSelection * 2) + curHorizontalSelection].text = getStringKey(checkKey);
 
+				//Controls.setActionKey(keyOptions.members[curSelection].text.toLowerCase(), curHorizontalSelection, 0);
+
 				// refresh keys
 				controls.setKeyboardScheme(None, false);
-
-				// update all keys on screen to have the right values
-				// inefficient so I rewrote it lolllll
-				/*for (i in 0...otherKeys.members.length)
-					{
-						var stringKey = getStringKey(Init.gameControls.get(keyOptions.members[otherKeys.members[i].controlGroupID].text)[0][otherKeys.members[i].extensionJ]);
-						trace('running $i times, options menu');
-				}*/
 
 				// close the submenu
 				closeSubmenu();

@@ -81,9 +81,9 @@ class Timings
 		combo = 0;
 		misses = 0;
 
-		ratingFinal = "F";
+		ratingFinal = "N/A";
 		comboDisplay = "";
-		updateScoreRating();
+		//updateRanking();
 	}
 
 	public static function updateAccuracy(judgement:Int, ?isSustain:Bool = false, ?segmentCount:Int = 1)
@@ -103,26 +103,10 @@ class Timings
 
 		// avoid increasing memory for updating the score bar text;
 		if (!isSustain)
-		{
-			updateFCDisplay();
-			updateScoreRating();
-		}
+			updateRanking();
 	}
 
-	public static function updateFCDisplay()
-	{
-		// update combo display
-		comboDisplay = "";
-		if (judgementsMap.get(smallestRating)[4] != null)
-			comboDisplay = judgementsMap.get(smallestRating)[4];
-		else if (misses < 10)
-			comboDisplay = 'SDCB';
-
-		// this updates the most so uh
-		PlayState.uiHUD.updateScoreText();
-	}
-
-	public static function updateScoreRating()
+	public static function updateRanking()
 	{
 		var biggest:Int = 0;
 		for (score in scoreRating.keys())
@@ -132,7 +116,17 @@ class Timings
 				biggest = scoreRating.get(score);
 				ratingFinal = score;
 			}
+
+			// update combo display
+			comboDisplay = "";
+			if (judgementsMap.get(smallestRating)[4] != null)
+				comboDisplay = judgementsMap.get(smallestRating)[4];
+			else if (misses < 10)
+				comboDisplay = 'SDCB';
 		}
+
+		// this updates the most so uh
+		PlayState.uiHUD.updateScoreText();
 	}
 
 	public static function returnAccuracy()

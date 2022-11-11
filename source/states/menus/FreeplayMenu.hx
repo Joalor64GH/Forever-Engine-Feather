@@ -20,6 +20,7 @@ import song.SongFormat.SwagSong;
 import sys.FileSystem;
 import sys.thread.Mutex;
 import sys.thread.Thread;
+import base.input.Controls;
 
 using StringTools;
 
@@ -224,21 +225,21 @@ class FreeplayMenu extends MusicBeatState
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = Controls.getPressEvent("ui_up");
+		var downP = Controls.getPressEvent("ui_down");
+		var accepted = Controls.getPressEvent("accept");
 
 		if (upP)
 			changeSelection(-1);
 		else if (downP)
 			changeSelection(1);
 
-		if (controls.UI_LEFT_P)
+		if (Controls.getPressEvent("ui_left"))
 			changeDiff(-1);
-		if (controls.UI_RIGHT_P)
+		if (Controls.getPressEvent("ui_right"))
 			changeDiff(1);
 
-		if (controls.BACK)
+		if (Controls.getPressEvent("back"))
 		{
 			threadActive = false;
 			Main.switchState(this, new MainMenu());

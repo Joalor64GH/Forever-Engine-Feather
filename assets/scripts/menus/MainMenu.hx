@@ -90,10 +90,10 @@ var counterControl:Float = 0;
 
 function update(elapsed:Float)
 {
-	var up = controls.UI_UP;
-	var down = controls.UI_DOWN;
-	var up_p = controls.UI_UP_P;
-	var down_p = controls.UI_DOWN_P;
+	var up = Controls.getPressEvent("ui_up", "pressed");
+	var down = Controls.getPressEvent("ui_down", "pressed");
+	var up_p = Controls.getPressEvent("ui_up");
+	var down_p = Controls.getPressEvent("ui_down");
 	var controlArray:Array<Bool> = [up, down, up_p, down_p];
 
 	if ((controlArray.contains(true)) && (!selectedSomethin))
@@ -129,7 +129,7 @@ function update(elapsed:Float)
 		counterControl = 0;
 	}
 
-	if ((controls.BACK) && (!selectedSomethin))
+	if ((Controls.getPressEvent("back")) && (!selectedSomethin))
 	{
 		//
 		selectedSomethin = true;
@@ -137,7 +137,7 @@ function update(elapsed:Float)
 		Main.switchState(this, new TitleState());
 	}
 
-	if ((controls.ACCEPT) && (!selectedSomethin))
+	if ((Controls.getPressEvent("accept")) && (!selectedSomethin))
 	{
 		selectedSomethin = true;
 		FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));

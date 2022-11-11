@@ -14,6 +14,7 @@ import song.MusicBeat.MusicBeatSubState;
 import states.menus.*;
 import sys.thread.Mutex;
 import sys.thread.Thread;
+import base.input.Controls;
 
 class PauseSubstate extends MusicBeatSubState
 {
@@ -104,9 +105,9 @@ class PauseSubstate extends MusicBeatSubState
 	{
 		super.update(elapsed);
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = Controls.getPressEvent("ui_up");
+		var downP = Controls.getPressEvent("ui_down");
+		var accepted = Controls.getPressEvent("accept");
 
 		if (upP)
 		{

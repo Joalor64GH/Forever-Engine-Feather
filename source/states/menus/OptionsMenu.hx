@@ -15,6 +15,7 @@ import gameObjects.userInterface.menu.Checkmark;
 import gameObjects.userInterface.menu.Selector;
 import song.MusicBeat.MusicBeatState;
 import states.substates.OptionsSubstate;
+import base.input.Controls;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -331,7 +332,7 @@ class OptionsMenu extends MusicBeatState
 			}
 		}
 
-		if (controls.BACK)
+		if (Controls.getPressEvent("back"))
 		{
 			FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
 			if (curCategory != 'main')
@@ -353,10 +354,10 @@ class OptionsMenu extends MusicBeatState
 
 	function updateSelections()
 	{
-		var up = controls.UI_UP;
-		var down = controls.UI_DOWN;
-		var up_p = controls.UI_UP_P;
-		var down_p = controls.UI_DOWN_P;
+		var up = Controls.getPressEvent("ui_up", "pressed");
+		var down = Controls.getPressEvent("ui_down", "pressed");
+		var up_p = Controls.getPressEvent("ui_up");
+		var down_p = Controls.getPressEvent("ui_down");
 		var controlArray:Array<Bool> = [up, down, up_p, down_p];
 
 		if (controlArray.contains(true))
@@ -447,7 +448,7 @@ class OptionsMenu extends MusicBeatState
 			{
 				case Init.SettingTypes.Checkmark:
 					// checkmark basics lol
-					if (controls.ACCEPT)
+					if (Controls.getPressEvent("accept"))
 					{
 						FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 						lockedMovement = true;
@@ -467,14 +468,14 @@ class OptionsMenu extends MusicBeatState
 				case Init.SettingTypes.Selector:
 					var selector:Selector = currentAttachmentMap.get(activeSubgroup.members[curSelection]);
 
-					if (!controls.UI_LEFT)
+					if (!Controls.getPressEvent("ui_left", "pressed"))
 						selector.selectorPlay('left');
-					if (!controls.UI_RIGHT)
+					if (!Controls.getPressEvent("ui_right", "pressed"))
 						selector.selectorPlay('right');
 
-					if (controls.UI_RIGHT_P)
+					if (Controls.getPressEvent("ui_right"))
 						updateSelector(selector, 1);
-					else if (controls.UI_LEFT_P)
+					else if (Controls.getPressEvent("ui_left"))
 						updateSelector(selector, -1);
 				default:
 					// none
@@ -565,7 +566,7 @@ class OptionsMenu extends MusicBeatState
 
 	public function callNewGroup()
 	{
-		if (controls.ACCEPT)
+		if (Controls.getPressEvent("accept"))
 		{
 			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;
@@ -578,7 +579,7 @@ class OptionsMenu extends MusicBeatState
 
 	public function openControlmenu()
 	{
-		if (controls.ACCEPT)
+		if (Controls.getPressEvent("accept"))
 		{
 			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;
@@ -593,7 +594,7 @@ class OptionsMenu extends MusicBeatState
 	public function exitMenu()
 	{
 		//
-		if (controls.ACCEPT)
+		if (Controls.getPressEvent("accept"))
 		{
 			FlxG.sound.play(Paths.sound('base/menus/confirmMenu'));
 			lockedMovement = true;

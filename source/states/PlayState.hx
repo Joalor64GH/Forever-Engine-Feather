@@ -36,7 +36,7 @@ import song.SongFormat.SwagSong;
 import song.SongFormat.TimedEvent;
 import states.menus.*;
 import states.substates.GameOverSubstate;
-import base.input.Controls as NewControls;
+import base.input.Controls;
 
 using StringTools;
 
@@ -372,7 +372,7 @@ class PlayState extends MusicBeatState
 		// initialize ui elements
 		startingSong = true;
 		startedCountdown = true;
-		canPause = false;
+		//canPause = false;
 
 		//
 		var downscroll = Init.trueSettings.get('Downscroll');
@@ -630,11 +630,11 @@ class PlayState extends MusicBeatState
 		if (dialogueBox != null && dialogueBox.alive)
 		{
 			// wheee the shift closes the dialogue
-			if (NewControls.getPressEvent("skipDiag"))
+			if (Controls.getPressEvent("skipDiag"))
 				dialogueBox.closeDialog();
 
 			// the change I made was just so that it would only take accept inputs
-			if (NewControls.getPressEvent("accept") && dialogueBox.textStarted)
+			if (Controls.getPressEvent("accept") && dialogueBox.textStarted)
 			{
 				FlxG.sound.play(Paths.sound('$assetModifier/menus/cancelMenu'));
 				dialogueBox.curPage += 1;
@@ -649,7 +649,7 @@ class PlayState extends MusicBeatState
 		if (!inCutscene)
 		{
 			// pause the game if the game is allowed to pause and enter is pressed
-			if (NewControls.getPressEvent("pause") && startedCountdown && canPause)
+			if (Controls.getPressEvent("pause") && startedCountdown && canPause)
 			{
 				stopTimers();
 				// open pause substate
@@ -660,7 +660,7 @@ class PlayState extends MusicBeatState
 			if (!isStoryMode)
 			{
 				// charting state (more on that later)
-				if ((NewControls.getPressEvent("debug")) && (!startingSong))
+				if ((Controls.getPressEvent("debug")) && (!startingSong))
 				{
 					resetMusic();
 					if (FlxG.keys.pressed.SHIFT)
@@ -670,7 +670,7 @@ class PlayState extends MusicBeatState
 					preventScoring = true;
 				}
 
-				if (NewControls.getPressEvent("autoplay"))
+				if (Controls.getPressEvent("autoplay"))
 				{
 					preventScoring = true;
 					bfStrums.autoplay = !bfStrums.autoplay;
@@ -761,7 +761,7 @@ class PlayState extends MusicBeatState
 			// Controls
 
 			// RESET = Quick Game Over Screen
-			if (NewControls.getPressEvent("reset") && !startingSong && !isStoryMode)
+			if (Controls.getPressEvent("reset") && !startingSong && !isStoryMode)
 				health = 0;
 
 			deathCheck();
@@ -1347,9 +1347,6 @@ class PlayState extends MusicBeatState
 			uiHUD.colorHighlight('miss', false);
 			healthCall(Timings.judgementsMap.get("miss")[3]);
 		}
-
-		// gotta do it manually here lol
-		Timings.updateFCDisplay();
 	}
 
 	function increaseCombo(?baseRating:String, ?direction = 0, ?strumline:Strumline)
