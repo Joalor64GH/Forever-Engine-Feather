@@ -32,7 +32,6 @@
 	<define name="VIDEO_PLUGIN" if="windows" unless="32bits || HXCPP_M32 || neko" />
 	<define name="SHOW_CONSOLE" if="debug" />
 	<define name="MODS_ALLOWED" if="desktop" />
-	<define name="MODCORE_ALLOWED" if="MODS_ALLOWED" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -90,7 +89,7 @@
 	<!-- Use defines to configure the behavior of Polymod. -->
 	<section if="MODCORE_ALLOWED">
 		<haxedef name="POLYMOD_USE_NAMESPACE" value="false" />
-		<haxedef name="POLYMOD_MOD_PACK_FILE" value="mod.txt" />
+		<haxedef name="POLYMOD_MOD_PACK_FILE" value="modPack.txt" />
 		<haxedef name="POLYMOD_MOD_METADATA_FILE" value="modData.json" />
 		<haxedef name="POLYMOD_MOD_ICON_FILE"  value="modIcon.png" />
 		<haxedef name="POLYMOD_MOD_SOFTWARE_LICENSE" value="LICENSE.txt" />
