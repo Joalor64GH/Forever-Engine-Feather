@@ -13,7 +13,7 @@ import playerData.*;
 import states.*;
 import states.charting.*;
 #if MODS_ALLOWED
-import modding.ModList;
+import modding.ModUtil;
 import modding.ModCore;
 import polymod.Polymod;
 import polymod.Polymod.Framework;
@@ -319,7 +319,7 @@ class Init extends FlxState
 
 		#if MODS_ALLOWED
 		if (openfl.Assets.exists('mods/')) {
-			var modList = ModCore.getAllModIds();
+			var modList = ModUtil.getAllModIds();
 			if (modList.length > 0)
 				ModCore.loadModsById(modList);
 		}

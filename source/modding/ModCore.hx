@@ -29,6 +29,8 @@ class ModCore
 
 	static final MOD_DIRECTORY:String = "mods";
 
+	static var loadedModList:Array<ModMetadata> = [];
+
 	private static final modExtensions:Map<String, PolymodAssetType> = [
 		'ogg' => AUDIO_SOUND,
         'png' => IMAGE,
@@ -47,7 +49,7 @@ class ModCore
 	{
 		#if MODS_ALLOWED
 		trace("[INFO] Initializing ModCore (using all mods)...");
-		loadModsById(getAllModIds());
+		loadModsById(ModUtil.getAllModIds());
 		#else
 		trace("[INFO] ModCore not initialized; not supported on this platform.");
 		#end
@@ -58,45 +60,11 @@ class ModCore
 		#if MODS_ALLOWED
 		trace("[INFO] Initializing ModCore (using user config)...");
 		trace('  User mod config: ${FlxG.save.data.modConfig}');
-		var userModConfig = getConfiguredMods();
+		var userModConfig = ModUtil.getConfiguredMods();
 		loadModsById(userModConfig);
 		#else
 		trace("[INFO] ModCore not initialized; not supported on this platform.");
 		#end
-	}
-
-	/**
-	 * If the user has configured an order of mods to load, returns the list of mod IDs in order.
-	 * Otherwise, returns a list of ALL installed mods in alphabetical order.
-	 * @return The mod order to load.
-	 */
-	public static function getConfiguredMods():Array<String>
-	{
-		var rawSaveData = FlxG.save.data.modConfig;
-
-		if (rawSaveData != null)
-		{
-			var modEntries = rawSaveData.split('~');
-			return modEntries;
-		}
-		else
-		{
-			// Mod list not in save!
-			return null;
-		}
-	}
-
-	public static function saveModList(loadedMods:Array<String>)
-	{
-		trace('[INFO] Saving mod configuration...');
-		var rawSaveData = loadedMods.join('~');
-		trace(rawSaveData);
-		FlxG.save.data.modConfig = rawSaveData;
-		var result = FlxG.save.flush();
-		if (result)
-			trace('[INFO] Mod configuration saved successfully.');
-		else
-			trace('[WARN] Failed to save mod configuration.');
 	}
 
 	public static function loadModsById(ids:Array<String>)
@@ -121,7 +89,7 @@ class ModCore
 	        }
         }
 
-		var loadedModList = polymod.Polymod.init({
+		loadedModList = polymod.Polymod.init({
 			modRoot: MOD_DIRECTORY,
 			dirs: modsToLoad,
 			framework: CUSTOM,
@@ -182,34 +150,6 @@ class ModCore
 		#else
 		trace("[WARN] Attempted to load mods when Polymod was not supported!");
 		#end
-	}
-
-	/**
-	 * Returns true if there are mods to load in the mod folder,
-	 * and false if there aren't (or mods aren't supported).
-	 * @return A boolean value.
-	 */
-	public static function hasMods():Bool
-	{
-		#if MODS_ALLOWED
-		return getAllMods().length > 0;
-		#else
-		return false;
-		#end
-	}
-
-	public static function getAllMods():Array<ModMetadata>
-	{
-		trace('[INFO] Scanning the mods folder...');
-		var modMetadata = Polymod.scan(MOD_DIRECTORY);
-		trace('[INFO] Found ${modMetadata.length} mods when scanning.');
-		return modMetadata;
-	}
-
-	public static function getAllModIds():Array<String>
-	{
-		var modIds = [for (i in getAllMods()) i.id];
-		return modIds;
 	}
 
 	#if MODS_ALLOWED
