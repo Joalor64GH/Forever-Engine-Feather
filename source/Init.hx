@@ -318,7 +318,8 @@ class Init extends FlxState
 		FlxG.mouse.visible = false; // Hide mouse on start
 
 		#if MODS_ALLOWED
-		if (openfl.Assets.exists('mods/')) {
+		if (openfl.Assets.exists('mods/'))
+		{
 			var modList = ModUtil.getAllModIds();
 			if (modList.length > 0)
 				ModCore.loadModsById(modList);

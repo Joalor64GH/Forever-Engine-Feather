@@ -2,7 +2,6 @@ package base;
 
 import lime.utils.Assets;
 import states.PlayState;
-
 import openfl.Assets as OpenFlAssets;
 import openfl.utils.AssetType;
 
@@ -131,7 +130,7 @@ class CoolUtil
 		var path:String = Paths.getPath(file);
 
 		var absolutePath:String = Assets.getPath(path);
-		var directory:Array<String> = listFilesInPath(absolutePath, null, ''); //I don't know if this will work as well as it should. @AltronMaxX
+		var directory:Array<String> = listFilesInPath(absolutePath, null, ''); // I don't know if this will work as well as it should. @AltronMaxX
 
 		if (directory != null)
 		{

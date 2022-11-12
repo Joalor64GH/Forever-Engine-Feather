@@ -29,7 +29,7 @@ function playHey(character:String = "boyfriend", timer:Float = 0.6)
 		default:
 			target = PlayState.boyfriend;
 	}
-	
+
 	if (target.animOffsets.exists('hey'))
 		target.playAnim('hey', true);
 	else if (target.animOffsets.exists('cheer'))

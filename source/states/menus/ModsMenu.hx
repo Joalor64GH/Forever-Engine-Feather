@@ -11,29 +11,29 @@ import song.MusicBeat.MusicBeatState;
 import gameObjects.gameFonts.Alphabet;
 
 /*
-    the Mods Menu, handles mod managment;
-*/
+	the Mods Menu, handles mod managment;
+ */
 class ModsMenu extends MusicBeatState
 {
-    public var background:FlxSprite;
-    public var boyfriend:FlxSprite;
-    public var itemGroup:FlxTypedGroup<Alphabet>;
+	public var background:FlxSprite;
+	public var boyfriend:FlxSprite;
+	public var itemGroup:FlxTypedGroup<Alphabet>;
 
-    override public function create()
-    {
-        super.create();
+	override public function create()
+	{
+		super.create();
 
-        // create background
+		// create background
 		generateBackground();
-    }
+	}
 
-    override public function update(elapsed:Float)
-    {
-        super.update(elapsed);
+	override public function update(elapsed:Float)
+	{
+		super.update(elapsed);
 
 		if (Controls.getPressEvent("back"))
-            Main.switchState(this, new MainMenu());
-    }
+			Main.switchState(this, new MainMenu());
+	}
 
 	function generateBackground():Void
 	{
@@ -42,7 +42,7 @@ class ModsMenu extends MusicBeatState
 		background.screenCenter();
 		add(background);
 
-        // mario;
+		// mario;
 		boyfriend = new FlxSprite().loadGraphic(Paths.image('menus/chart/bg'));
 		boyfriend.setGraphicSize(Std.int(FlxG.width));
 		boyfriend.scrollFactor.set();

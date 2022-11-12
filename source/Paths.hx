@@ -178,7 +178,7 @@ class Paths
 		if (FileSystem.exists(extensionPath))
 			gottenPath = extensionPath;
 
-		//gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
+		// gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
 		if (!currentTrackedSounds.exists(gottenPath))
 			currentTrackedSounds.set(gottenPath, Sound.fromFile(gottenPath));
 		localTrackedAssets.push(key);

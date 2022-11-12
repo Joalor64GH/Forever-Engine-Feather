@@ -11,7 +11,7 @@ class ModUtil
 
 	public static var modMetadatas:Map<String, ModMetadata> = new Map();
 
-	public static function reloadSavedMods():Void 
+	public static function reloadSavedMods():Void
 	{
 		var loadedMods:Array<String> = getConfiguredMods();
 		var allMods:Array<String> = getAllModIds();

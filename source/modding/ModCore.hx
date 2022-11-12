@@ -32,17 +32,8 @@ class ModCore
 	static var loadedModList:Array<ModMetadata> = [];
 
 	private static final modExtensions:Map<String, PolymodAssetType> = [
-		'ogg' => AUDIO_SOUND,
-        'png' => IMAGE,
-        'xml' => TEXT,
-        'json' => TEXT,
-        'txt' => TEXT,
-        'hx' => TEXT,
-        'hxs' => TEXT,
-		'hxc' => TEXT,
-        'hscript' => TEXT,
-        'ttf' => FONT,
-        'otf' => FONT
+		'ogg' => AUDIO_SOUND, 'png' => IMAGE, 'xml' => TEXT, 'json' => TEXT, 'txt' => TEXT, 'hx' => TEXT, 'hxs' => TEXT, 'hxc' => TEXT, 'hscript' => TEXT,
+		'ttf' => FONT, 'otf' => FONT
 	];
 
 	public static function loadAllMods()
@@ -71,23 +62,23 @@ class ModCore
 	{
 		#if MODS_ALLOWED
 		var modsToLoad:Array<String> = [];
-			
-        if (ids.length == 0)
-        {
-	        trace('[WARN] You attempted to load zero mods.');
-        }
-        else
-        {
-	        if (ids[0] != '' && ids != null)
-	        {
+
+		if (ids.length == 0)
+		{
+			trace('[WARN] You attempted to load zero mods.');
+		}
+		else
+		{
+			if (ids[0] != '' && ids != null)
+			{
 				trace('[INFO] Attempting to load ${ids.length} mods...');
-		        modsToLoad = ids;
-	        }
-	        else
-	        {
-		        modsToLoad = [];
-	        }
-        }
+				modsToLoad = ids;
+			}
+			else
+			{
+				modsToLoad = [];
+			}
+		}
 
 		loadedModList = polymod.Polymod.init({
 			modRoot: MOD_DIRECTORY,
@@ -170,18 +161,9 @@ class ModCore
 	{
 		return {
 			assetLibraryPaths: [
-				"songs" => "songs", 
-                "events" => "events", 
-                "fonts" => "fonts", 
-                "characters" => "characters", 
-                "scripts" => "scripts", 
-                "notetypes" => "notetypes",
-				"weeks" => "weeks", 
-                "music" => "music", 
-                "sounds" => "sounds", 
-                "images" => "images", 
-                "stages" => "stages",
-                "shaders" => "shaders"
+				"songs" => "songs", "events" => "events", "fonts" => "fonts", "characters" => "characters", "scripts" => "scripts",
+				"notetypes" => "notetypes", "weeks" => "weeks", "music" => "music", "sounds" => "sounds", "images" => "images", "stages" => "stages",
+				"shaders" => "shaders"
 			]
 		}
 	}
@@ -201,7 +183,7 @@ class ModCore
 			case MOD_LOAD_PREPARE:
 				trace('[INFO] ' + error.message, null);
 			case MOD_LOAD_DONE:
-				trace('[INFO] ' +  error.message, null);
+				trace('[INFO] ' + error.message, null);
 			// case MOD_LOAD_FAILED:
 			case MISSING_ICON:
 				trace('[WARN] A mod is missing an icon, will just skip it but please add one: ${error.message}', null);
@@ -226,11 +208,11 @@ class ModCore
 				switch (error.severity)
 				{
 					case NOTICE:
-						trace('[INFO] ' +  error.message, null);
+						trace('[INFO] ' + error.message, null);
 					case WARNING:
-						trace('[WARN] ' +  error.message, null);
+						trace('[WARN] ' + error.message, null);
 					case ERROR:
-						trace('[ERROR] ' +  error.message, null);
+						trace('[ERROR] ' + error.message, null);
 				}
 		}
 	}
