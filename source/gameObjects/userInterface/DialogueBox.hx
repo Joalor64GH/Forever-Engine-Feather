@@ -7,10 +7,12 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
+import flixel.addons.text.FlxTypeText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import openfl.media.Sound;
 import gameObjects.gameFonts.Alphabet;
 
 typedef PortraitDataDef =
@@ -27,6 +29,15 @@ typedef PortraitDataDef =
 	var sounds:Null<Array<String>>;
 	var soundChance:Null<Int>;
 	var soundPath:Null<String>;
+	var acceptSoundPath:Null<String>;
+	var acceptSound:Null<String>;
+	// PIXEL FONTS;
+	var font:Null<String>;
+	var fontColor:Null<Array<Int>>;
+	// BORDER PREFERENCES;
+	var borderSize:Null<Float>;
+	var borderColor:Null<Array<Int>>;
+	var shadowOffset:Null<Array<Int>>;
 }
 
 typedef DialogueDataDef =
@@ -50,13 +61,17 @@ typedef BoxDataDef =
 	var singleFrame:Null<Bool>;
 	var doFlip:Null<Bool>;
 	var bgColor:Null<Array<Int>>;
+	var showHand:Bool;
 
+	// var handTexture:String;
+	// var handSize:Float;
 	var states:Null<Dynamic>;
 }
 
 typedef DialogueFileDataDef =
 {
-	var box:String;
+	var box:Null<String>;
+	var boxStyle:Null<String>;
 	var boxState:Null<String>;
 	var dialogue:Array<DialogueDataDef>;
 }
@@ -72,7 +87,6 @@ class DialogueBox extends FlxSpriteGroup
 	public var box:FNFSprite;
 	public var bgFade:FlxSprite;
 	public var portrait:FNFSprite;
-	public var text:FlxText;
 	public var alphabetText:Alphabet;
 
 	public var dialogueData:DialogueFileDataDef;
@@ -89,6 +103,12 @@ class DialogueBox extends FlxSpriteGroup
 	public var whenDaFinish:Void->Void;
 
 	public var textStarted:Bool = false;
+
+	// PIXEL TEXT;
+	public var pixelText:FlxTypeText;
+	public var handSelect:FlxSprite;
+
+	public var acceptPath:String = Paths.file("sounds/base/menus/");
 
 	public static function createDialogue(thisDialogue:String):DialogueBox
 	{
@@ -134,18 +154,37 @@ class DialogueBox extends FlxSpriteGroup
 		// i dont wanna touch it ever
 		alphabetText = new Alphabet(100, 425, "cool", false, true, 0.7);
 
-		// text
-		text = new FlxText(100, 480, 1000, "", 35);
-		text.color = FlxColor.BLACK;
-		text.visible = false;
-
 		updateDialog(true);
+
+		if (dialogueData.boxStyle == "pixel")
+		{
+			pixelText = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
+			pixelText.color = FlxColor.fromRGB(portraitData.fontColor[0], portraitData.fontColor[1], portraitData.fontColor[2]);
+			pixelText.font = Paths.font(portraitData.font);
+
+			pixelText.borderStyle = SHADOW;
+			pixelText.borderSize = portraitData.borderSize;
+			pixelText.borderColor = FlxColor.fromRGB(portraitData.borderColor[0], portraitData.borderColor[1], portraitData.borderColor[2]);
+			pixelText.shadowOffset.set(portraitData.shadowOffset[0], portraitData.shadowOffset[1]);
+
+			handSelect = new FlxSprite(1042, 590);
+			handSelect.loadGraphic(Paths.image('dialogue/selectors/pixelHand'));
+			handSelect.setGraphicSize(Std.int(handSelect.width * states.PlayState.daPixelZoom * 0.9));
+			handSelect.updateHitbox();
+		}
 
 		// add stuff
 		add(portrait);
 		add(box);
-		add(text);
 
+		if (pixelText != null)
+		{
+			add(pixelText);
+			if (boxData.showHand)
+				add(handSelect);
+		}
+
+		alphabetText.visible = dialogueData.boxStyle == "funkin";
 		add(alphabetText);
 
 		// skip text
@@ -169,17 +208,6 @@ class DialogueBox extends FlxSpriteGroup
 
 		var pageData = dialogueData.dialogue[curPage];
 
-		var startText:Void->Void = function()
-		{
-			// Text update
-			var textToDisplay = "lol u need text for dialog";
-
-			if (pageData.text != null)
-				textToDisplay = pageData.text;
-
-			alphabetText.startText(textToDisplay, true);
-		}
-
 		// change speed
 		if (pageData.speed != null)
 			alphabetText.textSpeed = 0.06 / pageData.speed;
@@ -191,6 +219,30 @@ class DialogueBox extends FlxSpriteGroup
 			alphabetText.textSize = 0.7 * pageData.scale;
 		else
 			alphabetText.textSize = 0.7;
+
+		var startText:Void->Void = function()
+		{
+			// Text update
+			var textToDisplay = "lol u need text for dialog";
+
+			if (pageData.text != null)
+				textToDisplay = pageData.text;
+
+			alphabetText.startText(textToDisplay, true);
+
+			if (pixelText != null)
+			{
+				handSelect.visible = false;
+				pixelText.resetText(textToDisplay);
+				pixelText.start(alphabetText.textSpeed, true);
+
+				pixelText.completeCallback = function()
+				{
+					alphabetText.finishedLine = true;
+					handSelect.visible = true;
+				}
+			}
+		}
 
 		// If no text has shown up yet, we need to wait a moment
 		if (textStarted == false)
@@ -291,10 +343,10 @@ class DialogueBox extends FlxSpriteGroup
 			box.scale = new FlxPoint(boxData.scale, boxData.scale);
 			box.antialiasing = boxData.antialiasing;
 
-			if (boxData.textPos != null)
+			if (boxData.textPos != null && pixelText != null)
 			{
-				text.x = boxData.textPos[0];
-				text.y = boxData.textPos[1];
+				pixelText.x = boxData.textPos[0];
+				pixelText.y = boxData.textPos[1];
 			}
 
 			box.playAnim('normalOpen');
@@ -309,8 +361,9 @@ class DialogueBox extends FlxSpriteGroup
 		{
 			if (newChar != null)
 			{
-				// made the curCharacter the new character
 				curCharacter = newChar;
+
+				// made the curCharacter the new character
 				var portraitJson = Paths.file('images/dialogue/portraits/$curCharacter/$curCharacter.json');
 
 				// load the json file
@@ -388,13 +441,36 @@ class DialogueBox extends FlxSpriteGroup
 
 				portrait.flipX = newFlip;
 
+				if (portraitData.font == null)
+					portraitData.font = "pixel";
+
+				if (portraitData.fontColor == null)
+					portraitData.fontColor = [63, 32, 33];
+
+				if (portraitData.borderColor == null)
+					portraitData.borderColor = [216, 148, 148];
+
+				if (portraitData.borderSize == null)
+					portraitData.borderSize = 2;
+
+				if (portraitData.shadowOffset == null)
+					portraitData.shadowOffset = [2, 2];
+
+				if (portraitData.acceptSound == null)
+					portraitData.acceptSound = "cancelMenu";
+
+				if (portraitData.acceptSoundPath != null)
+					acceptPath = Paths.file(portraitData.acceptSoundPath);
+				else
+					acceptPath = Paths.file("sounds/base/menus/");
+
 				// update bloops
 				if (portraitData.sounds != null)
 				{
 					if (portraitData.soundPath != null)
-						alphabetText.beginPath = "assets/" + portraitData.soundPath;
+						alphabetText.beginPath = Paths.file(portraitData.soundPath);
 					else
-						alphabetText.beginPath = 'assets/images/dialogue/portraits/$curCharacter/';
+						alphabetText.beginPath = Paths.file('images/dialogue/portraits/$curCharacter/');
 
 					alphabetText.soundChoices = portraitData.sounds;
 
@@ -402,6 +478,19 @@ class DialogueBox extends FlxSpriteGroup
 						alphabetText.soundChance = portraitData.soundChance;
 					else
 						alphabetText.soundChance = 40;
+
+					if (pixelText != null)
+					{
+						pixelText.sounds = [];
+						for (i in 0...portraitData.sounds.length)
+						{
+							if (portraitData.sounds != null)
+								pixelText.sounds.push(FlxG.sound.load(Sound.fromFile(Paths.file(portraitData.soundPath + portraitData.sounds[i] + "."
+									+ Paths.SOUND_EXT)), 0.6));
+							else
+								pixelText.sounds.push(FlxG.sound.load(Paths.sound('dialogue/pixelText'), 0.6));
+						}
+					}
 				}
 				else
 					alphabetText.soundChance = 0;
@@ -457,7 +546,7 @@ class DialogueBox extends FlxSpriteGroup
 
 			case "sound":
 				var _sound = eventArray[1] + "." + Paths.SOUND_EXT;
-				FlxG.sound.play(Paths.file(_sound));
+				FlxG.sound.play(Sound.fromFile(Paths.file(_sound)));
 		}
 	}
 
@@ -489,6 +578,9 @@ class DialogueBox extends FlxSpriteGroup
 	{
 		var tisOkay = true;
 
+		if (dialogueData.boxStyle == null)
+			dialogueData.boxStyle = "funkin";
+
 		if (dialogueData.box == null)
 			tisOkay = false;
 		if (dialogueData.dialogue == null)
@@ -504,8 +596,6 @@ class DialogueBox extends FlxSpriteGroup
 		{
 			if (boxData.singleFrame != true)
 				box.playAnim('normal');
-
-			text.visible = true;
 		}
 
 		portrait.animation.paused = alphabetText.finishedLine;
@@ -517,6 +607,14 @@ class DialogueBox extends FlxSpriteGroup
 			bgFade.alpha = 0.6;
 
 		super.update(elapsed);
+	}
+
+	public function skipLine()
+	{
+		if (curPage == dialogueData.dialogue.length)
+			closeDialog()
+		else
+			updateDialog();
 	}
 
 	override function add(Object:FlxSprite):FlxSprite

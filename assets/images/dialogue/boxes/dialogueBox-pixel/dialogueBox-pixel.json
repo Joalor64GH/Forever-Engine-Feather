@@ -11,6 +11,7 @@
     "antialiasing": false,
     "singleFrame": true,
     "doFlip": false,
+    "showHand": true,
     "bgColor": [
         255,
         255,

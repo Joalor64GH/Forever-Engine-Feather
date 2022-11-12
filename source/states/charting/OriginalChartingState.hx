@@ -1607,7 +1607,7 @@ private final class AbsoluteText extends FlxText
 
 	public function setForm(size:Int):AbsoluteText
 	{
-		setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		setFormat(Paths.font("vcr"), size, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		return this;
 	}
 

@@ -628,13 +628,9 @@ class PlayState extends MusicBeatState
 			// the change I made was just so that it would only take accept inputs
 			if (Controls.getPressEvent("accept") && dialogueBox.textStarted)
 			{
-				FlxG.sound.play(Paths.sound('$assetModifier/menus/cancelMenu'));
+				FlxG.sound.play(openfl.media.Sound.fromFile(dialogueBox.acceptPath + dialogueBox.portraitData.acceptSound + "." + Paths.SOUND_EXT));
 				dialogueBox.curPage += 1;
-
-				if (dialogueBox.curPage == dialogueBox.dialogueData.dialogue.length)
-					dialogueBox.closeDialog()
-				else
-					dialogueBox.updateDialog();
+				dialogueBox.skipLine();
 			}
 		}
 
@@ -1199,7 +1195,7 @@ class PlayState extends MusicBeatState
 
 	override public function onFocusLost():Void
 	{
-		if (canPause && !paused && !bfStrums.autoplay && !Init.trueSettings.get('Auto Pause'))
+		if (canPause && !paused && !inCutscene && !bfStrums.autoplay && !Init.trueSettings.get('Auto Pause'))
 		{
 			stopTimers();
 			// open pause substate

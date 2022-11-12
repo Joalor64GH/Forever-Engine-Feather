@@ -33,7 +33,7 @@ class Overlay extends TextField
 		autoSize = LEFT;
 		selectable = false;
 
-		defaultTextFormat = new TextFormat(Paths.font("vcr.ttf"), 18, 0xFFFFFF);
+		defaultTextFormat = new TextFormat(Paths.font("vcr"), 18, 0xFFFFFF);
 		text = "";
 
 		addEventListener(Event.ENTER_FRAME, update);
@@ -132,7 +132,7 @@ class Console extends TextField
 
 		selectable = false;
 		mouseEnabled = mouseWheelEnabled = true;
-		defaultTextFormat = new TextFormat(Paths.font("vcr.ttf"), 14, color);
+		defaultTextFormat = new TextFormat(Paths.font("vcr"), 14, color);
 		text = "Start of log";
 		alpha = 0;
 

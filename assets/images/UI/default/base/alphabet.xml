@@ -34,10 +34,10 @@
 	<SubTexture name="+0001" x="617" y="0" width="42" height="39" />
 	<SubTexture name="+0002" x="669" y="0" width="42" height="39" />
 	<SubTexture name="+0003" x="669" y="0" width="42" height="39" />
-	<SubTexture name="-0000" x="721" y="0" width="37" height="13" />
-	<SubTexture name="-0001" x="721" y="0" width="37" height="13" />
-	<SubTexture name="-0002" x="768" y="0" width="37" height="13" />
-	<SubTexture name="-0003" x="768" y="0" width="37" height="13" />
+	<SubTexture name="dash0000" x="721" y="0" width="37" height="13" />
+	<SubTexture name="dash0001" x="721" y="0" width="37" height="13" />
+	<SubTexture name="dash0002" x="768" y="0" width="37" height="13" />
+	<SubTexture name="dash0003" x="768" y="0" width="37" height="13" />
 	<SubTexture name="00000" x="815" y="0" width="34" height="54" frameX="0" frameY="0" frameWidth="35" frameHeight="54" />
 	<SubTexture name="00001" x="815" y="0" width="34" height="54" frameX="0" frameY="0" frameWidth="35" frameHeight="54" />
 	<SubTexture name="00002" x="859" y="0" width="35" height="54" />

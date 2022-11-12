@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
+import openfl.media.Sound;
 
 using StringTools;
 
@@ -86,13 +87,9 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 		if (text != "")
 		{
 			if (typed)
-			{
 				startTypedText();
-			}
 			else
-			{
 				addText();
-			}
 		}
 		else if (swagTypingTimer != null)
 		{
@@ -277,15 +274,12 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 						var cur = FlxG.random.int(0, soundChoices.length - 1);
 						var daSound:String = beginPath + soundChoices[cur] + "." + Paths.SOUND_EXT;
 
-						try
+						if (daSound.endsWith(Paths.SOUND_EXT))
 						{
-							if (daSound.endsWith(Paths.SOUND_EXT))
-							{
-								if (daSound == null)
-									FlxG.sound.play(Paths.sound('dialogue/pixelText'));
-								else
-									FlxG.sound.play(daSound);
-							}
+							if (daSound == null)
+								FlxG.sound.play(Paths.sound('dialogue/pixelText'));
+							else
+								FlxG.sound.play(Sound.fromFile(daSound));
 						}
 					}
 				}
@@ -444,11 +438,16 @@ class AlphaCharacter extends FlxSprite
 	{
 		switch (letter)
 		{
+			case '-':
+				animation.addByPrefix(letter, 'dash', 24);
+				animation.play(letter);
+				scale.set(0.9, 0.9);
+				y += 35;
 			case '.':
 				animation.addByPrefix(letter, 'period', 24);
 				animation.play(letter);
 				setGraphicSize(8, 8);
-				y += 48;
+				y += 47;
 			case "'":
 				animation.addByPrefix(letter, 'apostraphie', 24);
 				animation.play(letter);

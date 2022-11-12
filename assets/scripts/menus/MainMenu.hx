@@ -79,7 +79,7 @@ function postCreate()
 	var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0,
 		"Forever Engine Legacy v" + Main.gameVersion + " [Feather Build v" + Main.featherVersion + "]", 12);
 	versionShit.scrollFactor.set();
-	versionShit.setFormat(Paths.font("vcr.ttf"), 16, 0xFFFFFFFF, ForeverTools.setTextAlign('left'), FlxTextBorderStyle.OUTLINE, 0xFF000000);
+	versionShit.setFormat(Paths.font("vcr"), 16, 0xFFFFFFFF, ForeverTools.setTextAlign('left'), FlxTextBorderStyle.OUTLINE, 0xFF000000);
 	add(versionShit);
 
 	//

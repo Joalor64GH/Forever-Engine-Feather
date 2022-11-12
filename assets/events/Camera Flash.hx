@@ -9,5 +9,4 @@ function eventTrigger(params)
 }
 
 function returnDescription()
-	return
-		"Flashes the camera with the given color and time,\nValue 1: Color to use for the Flash.\nValue 2: Duration of the Flash.";
+	return "Flashes the camera with the given color and time,\nValue 1: Color to use for the Flash.\nValue 2: Duration of the Flash.";

@@ -6,30 +6,38 @@ function eventTrigger(params)
 
 	switch (params[0])
 	{
-		case 'dad', 'dadOpponent', 'opponent', '1':
-			if (PlayState.opponent.animOffsets.exists('hey'))
-				PlayState.opponent.playAnim('hey', true);
-			else if (PlayState.opponent.animOffsets.exists('cheer'))
-				PlayState.opponent.playAnim('cheer', true);
-			PlayState.opponent.specialAnim = true;
-			PlayState.opponent.heyTimer = timer;
-		case 'gf', 'girlfriend', 'spectator', '2':
-			if (PlayState.gf.animOffsets.exists('hey'))
-				PlayState.gf.playAnim('hey', true);
-			else if (PlayState.gf.animOffsets.exists('cheer'))
-				PlayState.gf.playAnim('cheer', true);
-			PlayState.gf.specialAnim = true;
-			PlayState.gf.heyTimer = timer;
+		case "bfAndGf", "bfgf", "both", "3":
+			playHey("gf", timer);
+			playHey("bf", timer);
+		case "bfGfDad", "bfGfOpponent", "all", "4":
+			playHey("gf", timer);
+			playHey("bf", timer);
 		default:
-			if (PlayState.boyfriend.animOffsets.exists('hey'))
-				PlayState.boyfriend.playAnim('hey', true);
-			else if (PlayState.boyfriend.animOffsets.exists('cheer'))
-				PlayState.boyfriend.playAnim('cheer', true);
-			PlayState.boyfriend.specialAnim = true;
-			PlayState.boyfriend.heyTimer = timer;
+			playHey(params[0], timer);
 	}
+}
+
+function playHey(character:String = "boyfriend", timer:Float = 0.6)
+{
+	var target:Character = null;
+	switch (character)
+	{
+		case 'dad', 'dadOpponent', 'opponent', '1':
+			target = PlayState.opponent;
+		case 'gf', 'girlfriend', 'spectator', '2':
+			target = PlayState.gf;
+		default:
+			target = PlayState.boyfriend;
+	}
+	
+	if (target.animOffsets.exists('hey'))
+		target.playAnim('hey', true);
+	else if (target.animOffsets.exists('cheer'))
+		target.playAnim('cheer', true);
+	target.specialAnim = true;
+	target.heyTimer = timer;
 }
 
 function returnDescription()
 	return
-		"Plays the \"Hey!\" animation from Bopeebo,\ncharacterValue 1: Character (bf, gf, dad, defaults to bf).\ncharacterValue 2: Custom animation duration,\nleave it blank for 0.6s";
+		"Plays the \"Hey!\" animation from Bopeebo,\nValue 1: Character (bf, gf, dad, both, all, defaults to bf).\nValue 2: Custom animation duration,\nleave it blank for 0.6s";

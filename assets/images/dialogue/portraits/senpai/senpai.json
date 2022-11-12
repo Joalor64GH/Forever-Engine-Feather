@@ -16,5 +16,7 @@
         "pixelText"
     ],
     "soundChance": 100,
-    "soundPath": "sounds/dialogue/"
+    "soundPath": "sounds/dialogue/",
+    "acceptSoundPath": "sounds/dialogue/",
+    "acceptSound": "clickText"
 }
