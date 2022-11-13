@@ -21,7 +21,7 @@ import gameObjects.*;
 import gameObjects.Strumline.Receptor;
 import openfl.geom.ColorTransform;
 import song.Conductor;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 import song.Song;
 import song.SongFormat.SwagSong;
 

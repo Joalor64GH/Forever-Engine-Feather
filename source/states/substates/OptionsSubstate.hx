@@ -9,12 +9,11 @@ import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import gameObjects.gameFonts.Alphabet;
-import song.MusicBeat.MusicBeatSubState;
-import base.input.Controls;
+import states.MusicBeatState.MusicBeatSubstate;
 
 using StringTools;
 
-class OptionsSubstate extends MusicBeatSubState
+class OptionsSubstate extends MusicBeatSubstate
 {
 	private var curSelection = 0;
 	private var submenuGroup:FlxTypedGroup<FlxBasic>;
@@ -26,14 +25,13 @@ class OptionsSubstate extends MusicBeatSubState
 	override public function create():Void
 	{
 		// call the options menu
-		var bg = new FlxSprite(-85);
-		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
+		var bg = new FlxSprite(-85).loadGraphic(Paths.image('menus/base/menuDesat'));
+		bg.scrollFactor.set(0, 0.18);
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.color = 0xCE64DF;
+		// bg.color = 0xD8B168;
 		bg.antialiasing = true;
 		add(bg);
 

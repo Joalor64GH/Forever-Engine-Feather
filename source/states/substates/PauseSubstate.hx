@@ -1,6 +1,5 @@
 package states.substates;
 
-import base.CoolUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -10,13 +9,12 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import gameObjects.gameFonts.Alphabet;
-import song.MusicBeat.MusicBeatSubState;
+import states.MusicBeatState.MusicBeatSubstate;
 import states.menus.*;
 import sys.thread.Mutex;
 import sys.thread.Thread;
-import base.input.Controls;
 
-class PauseSubstate extends MusicBeatSubState
+class PauseSubstate extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 

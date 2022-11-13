@@ -13,5 +13,33 @@
     "bfPos": [
         970,
         620
+    ],
+    "objects": [
+        {
+            "name": "evilBG",
+            "image": "animatedEvilSchool",
+            "position": [
+                400,
+                200
+            ],
+            "scrollFactor": [
+                0.8,
+                0.9
+            ],
+            "scale": [
+                6,
+                6
+            ],
+            "animations": [
+                [
+                    "idle",
+                    "background 2",
+                    24,
+                    false
+                ]
+            ],
+            "antialiasing": false,
+            "defaultAnimation": "idle"
+        }
     ]
 }

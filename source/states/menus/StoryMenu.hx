@@ -1,7 +1,5 @@
 package states.menus;
 
-import base.input.Controls;
-import base.CoolUtil;
 import dependency.Discord;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -17,7 +15,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameObjects.userInterface.menu.*;
 import playerData.Highscore;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 import song.Song;
 
 using StringTools;
@@ -130,7 +128,11 @@ class StoryMenu extends MusicBeatState
 		var weekChars = Main.gameWeeksMap.get(Main.gameWeeks[curWeek]).characters;
 		for (char in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, weekChars[char]);
+			var list = weekChars[char];
+			if (weekChars[char] == null)
+				weekChars[char] = 'bf';
+
+			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, list);
 			weekCharacterThing.antialiasing = true;
 			grpWeekCharacters.add(weekCharacterThing);
 		}

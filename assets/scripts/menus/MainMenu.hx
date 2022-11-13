@@ -44,7 +44,7 @@ function postCreate()
 	// loop through the menu options
 	for (i in 0...parsedJson.options.length)
 	{
-		var menuItem:FlxSprite = new FlxSprite(0, 70 + (i * 160));
+		var menuItem:FlxSprite = new FlxSprite(0, 70 + (i * 230));
 		menuItem.frames = Paths.getSparrowAtlas('menus/base/menuItems/' + parsedJson.options[i]);
 
 		// add the animations in a cool way (real

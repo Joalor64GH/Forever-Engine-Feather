@@ -1,4 +1,4 @@
-function dadPosition(boyfriend:Character, gf:Character, dad:Character, camPos:FlxPoint)
+function dadPosition(boyfriend:Character, gf:Character, dad:Character)
 {
 	if (StringTools.startsWith('gf', dad.curCharacter))
 	{

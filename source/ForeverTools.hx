@@ -10,9 +10,7 @@ import flixel.tweens.FlxTween.FlxTweenType;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import openfl.display.BlendMode;
-import openfl.utils.AssetType;
 import song.Conductor;
-import states.PlayState;
 import sys.FileSystem;
 
 /**

@@ -2,27 +2,18 @@ package;
 
 import base.*;
 import base.Overlay.Console;
-import base.input.Controls;
 import dependency.Discord;
 import dependency.FNFTransition;
-import dependency.FNFUIState;
-import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxGame;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.util.FlxColor;
-import haxe.CallStack.StackItem;
 import haxe.CallStack;
 import haxe.Json;
 import haxe.io.Path;
 import lime.app.Application;
-import openfl.Assets;
 import openfl.Lib;
-import openfl.display.FPS;
 import openfl.display.Sprite;
-import openfl.events.Event;
 import openfl.events.UncaughtErrorEvent;
 import sys.FileSystem;
 import sys.io.File;
@@ -201,12 +192,17 @@ class Main extends Sprite
 
 		FlxG.stage.application.window.onClose.add(function()
 		{
-			#if DISCORD_RPC
-			Discord.shutdownRPC();
-			#end
-			Sys.exit(1);
-			base.input.Controls.destroy();
+			destroyGame();
 		});
+	}
+
+	function destroyGame()
+	{
+		base.Controls.destroy();
+		#if DISCORD_RPC
+		Discord.shutdownRPC();
+		#end
+		openfl.system.System.exit(1);
 	}
 
 	public static function framerateAdjust(input:Float)
@@ -304,5 +300,7 @@ class Main extends Sprite
 			Sys.println("No crash dialog found! Making a simple alert instead...");
 			Application.current.window.alert(errMsg, "Error!");
 		}
+
+		destroyGame();
 	}
 }

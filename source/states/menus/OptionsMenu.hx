@@ -13,9 +13,8 @@ import flixel.util.FlxTimer;
 import gameObjects.gameFonts.Alphabet;
 import gameObjects.userInterface.menu.Checkmark;
 import gameObjects.userInterface.menu.Selector;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 import states.substates.OptionsSubstate;
-import base.input.Controls;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -122,10 +121,8 @@ class OptionsMenu extends MusicBeatState
 		ForeverTools.resetMenuMusic();
 
 		// call the options menu
-		var bg = new FlxSprite(-85);
-		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
+		var bg = new FlxSprite(-85).loadGraphic(Paths.image('menus/base/menuDesat'));
+		bg.scrollFactor.set(0, 0.18);
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();

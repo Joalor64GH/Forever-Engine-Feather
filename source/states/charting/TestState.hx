@@ -1,35 +1,11 @@
 package states.charting;
 
-import flixel.FlxBasic;
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.FlxStrip;
 import flixel.addons.display.FlxBackdrop;
-import flixel.addons.display.FlxTiledSprite;
-import flixel.addons.ui.FlxUI9SliceSprite;
-import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
-import flixel.graphics.FlxGraphic;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.graphics.frames.FlxFrame;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
-import gameObjects.Note;
-import gameObjects.userInterface.menu.DebugUI.UIBox;
-import gameObjects.userInterface.menu.DebugUI;
-import haxe.io.Bytes;
-import lime.media.AudioBuffer;
-import lime.media.vorbis.VorbisFile;
-import openfl.display.BitmapData;
-import openfl.geom.Matrix;
-import openfl.geom.Rectangle;
-import openfl.media.Sound;
-import song.MusicBeat.MusicBeatState;
-#if sys
-import sys.thread.Thread;
-#end
+import states.MusicBeatState;
 
 /**
 	This is just code I stole from gedehari, he's a really cool guy. Here's a link to the source.

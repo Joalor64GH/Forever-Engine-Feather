@@ -1,6 +1,5 @@
 package gameObjects.userInterface;
 
-import base.CoolUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -115,7 +114,7 @@ class ClassHUD extends FlxSpriteGroup
 
 		autoplayMark = new FlxText(-5, (Init.trueSettings.get('Downscroll') ? centerMark.y - 60 : centerMark.y + 60), FlxG.width - 800, '[AUTOPLAY]\n', 32);
 		autoplayMark.setFormat(Paths.font("vcr"), 32, FlxColor.WHITE, CENTER);
-		autoplayMark.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+		autoplayMark.setBorderStyle(OUTLINE, FlxColor.BLACK, 2.3);
 		autoplayMark.screenCenter(X);
 		autoplayMark.visible = PlayState.bfStrums.autoplay;
 
@@ -173,14 +172,15 @@ class ClassHUD extends FlxSpriteGroup
 
 		var isRated = (Timings.comboDisplay != null && Timings.comboDisplay != '' && Timings.notesHit > 0);
 		var rank:String = (Timings.returnScoreRating() != null
-			&& Timings.returnScoreRating() != '' ? '[${Timings.returnScoreRating()}]' : '');
+			&& Timings.returnScoreRating() != ''
+			&& Timings.notesHit > 0 ? '[${Timings.returnScoreRating()}]' : '');
 
 		// testing purposes
 		var displayAccuracy:Bool = Init.trueSettings.get('Display Accuracy');
 		if (displayAccuracy)
 		{
 			scoreDisplay += divider + markupDivider + 'Accuracy: ${Timings.returnAccuracy()}' + markupDivider;
-			scoreDisplay += isRated ? ' $markupDivider[' + Timings.comboDisplay + divider + Timings.returnScoreRating() + ']$markupDivider' : ' $markupDivider'
+			scoreDisplay += isRated ? ' $markupDivider[' + Timings.comboDisplay + divider + Timings.returnScoreRating() + ']$markupDivider' : '$markupDivider'
 				+ rank
 				+ '$markupDivider';
 			scoreDisplay += divider + 'Combo Breaks: ${Timings.misses}';

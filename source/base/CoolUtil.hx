@@ -1,7 +1,6 @@
 package base;
 
 import lime.utils.Assets;
-import states.PlayState;
 import openfl.Assets as OpenFlAssets;
 import openfl.utils.AssetType;
 

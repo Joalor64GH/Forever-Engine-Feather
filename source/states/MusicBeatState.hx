@@ -1,13 +1,12 @@
-package song;
+package states;
 
-import base.input.Controls;
 import dependency.FNFUIState;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
-import song.Conductor.BPMChangeEvent;
+import song.Conductor;
 
 /* 
 	Music beat state happens to be the first thing on my list of things to add, it just so happens to be the backbone of
@@ -191,7 +190,7 @@ class MusicBeatState extends FNFUIState
 	}
 }
 
-class MusicBeatSubState extends FlxSubState
+class MusicBeatSubstate extends FlxSubState
 {
 	public function new()
 	{

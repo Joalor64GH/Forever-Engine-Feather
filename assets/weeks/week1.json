@@ -3,24 +3,38 @@
 		{
 			"name": "Bopeebo",
 			"opponent": "dad",
-			"colors": [129, 100, 223]
+			"colors": [
+				129,
+				100,
+				223
+			]
 		},
 		{
 			"name": "Fresh",
 			"opponent": "dad",
-			"colors": [129, 100, 223]
+			"colors": [
+				129,
+				100,
+				223
+			]
 		},
 		{
 			"name": "Dadbattle",
 			"opponent": "dad",
-			"colors": [129, 100, 223]
+			"colors": [
+				129,
+				100,
+				223
+			]
 		}
 	],
-
 	"attachedImage": "week1",
 	"storyName": "Daddy Dearest",
-	"characters": ["dad", "bf", "gf"],
-
+	"characters": [
+		"dad",
+		"bf",
+		"gf"
+	],
 	"startsLocked": false,
 	"hideOnStory": false,
 	"hideOnFreeplay": false,

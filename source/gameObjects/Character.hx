@@ -1,9 +1,5 @@
 package gameObjects;
 
-/**
-	The character class initialises any and all characters that exist within gameplay. For now, the character class will
-	stay the same as it was in the original source of the game. I'll most likely make some changes afterwards though!
-**/
 import base.compatibility.PsychChar;
 import base.feather.ScriptHandler;
 import dependency.FNFSprite;
@@ -42,6 +38,9 @@ typedef CharacterData =
 	var icon:String;
 }
 
+/**
+	The character class initialises any and all characters that exist within gameplay.
+**/
 class Character extends FNFSprite
 {
 	public var debugMode:Bool = false;
@@ -139,19 +138,20 @@ class Character extends FNFSprite
 				characterData.healthColor = [161, 161, 161];
 
 			default:
-				if (characterType == PSYCH_ENGINE)
-					generatePsychChar(character);
-				else
+				switch (characterType)
 				{
-					try
-					{
-						generateChar(character); // old system, for now i guess;
-					}
-					catch (e)
-					{
-						trace('$character is/was null');
-						return setCharacter(x, y, 'placeholder');
-					}
+					case PSYCH_ENGINE:
+						generatePsychChar(character);
+					default:
+						try
+						{
+							generateChar(character);
+						}
+						catch (e)
+						{
+							trace('$character is/was null');
+							return setCharacter(x, y, 'placeholder');
+						}
 				}
 		}
 

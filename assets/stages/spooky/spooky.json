@@ -14,15 +14,27 @@
         770,
         450
     ],
-
     "objects": [
         {
             "name": "hallowBack",
             "image": "halloween_bg",
-            "position": [-200, -100],
+            "position": [
+                -200,
+                -100
+            ],
             "animations": [
-                ["idle", "halloweem bg0", 24, false],
-                ["lightning", "halloweem bg lightning strike", 24, false]
+                [
+                    "idle",
+                    "halloweem bg0",
+                    24,
+                    false
+                ],
+                [
+                    "lightning",
+                    "halloweem bg lightning strike",
+                    24,
+                    false
+                ]
             ],
             "defaultAnimation": "idle"
         }

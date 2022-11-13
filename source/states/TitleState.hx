@@ -1,7 +1,5 @@
 package states;
 
-import base.input.Controls;
-import base.CoolUtil;
 import dependency.Discord;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -29,7 +27,7 @@ import gameObjects.gameFonts.Alphabet;
 import lime.app.Application;
 import openfl.Assets;
 import song.Conductor;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 
 using StringTools;
 

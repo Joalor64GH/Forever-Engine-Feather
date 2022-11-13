@@ -3,14 +3,20 @@
 		{
 			"name": "Tutorial",
 			"opponent": "gf",
-			"colors": [165, 0, 77]
+			"colors": [
+				165,
+				0,
+				77
+			]
 		}
 	],
-
 	"attachedImage": "week0",
 	"storyName": "",
-	"characters": ["", "bf", "gf"],
-
+	"characters": [
+		"",
+		"bf",
+		"gf"
+	],
 	"startsLocked": false,
 	"hideOnStory": false,
 	"hideOnFreeplay": false,

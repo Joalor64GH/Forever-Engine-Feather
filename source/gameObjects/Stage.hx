@@ -29,6 +29,7 @@ typedef StageObject =
 	var imageDirectory:Null<String>; // the image file path for `this` object;
 	var position:Null<Array<Float>>; // the position of `this` object;
 	var scrollFactor:Null<Array<Float>>; // the scroll factor for `this` object;
+	var scale:Null<Array<Float>>; // the scale for `this` object;
 	var animations:Null<Array<Dynamic>>; // the animations available on `this` object;
 	var defaultAnimation:Null<String>; // the object's default animation;
 	var flipX:Null<Bool>; // whether `this` object is flipped horizontally;
@@ -135,7 +136,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 						createdSprite.frames = Paths.getSparrowAtlas(object.image, directory);
 						for (anim in object.animations)
 							createdSprite.animation.addByPrefix(anim[0], anim[1], anim[2], anim[3]);
-						if (object.defaultAnimation == null)
+						if (object.defaultAnimation != null)
 							createdSprite.playAnim(object.defaultAnimation);
 					}
 					else
@@ -145,6 +146,11 @@ class Stage extends FlxTypedGroup<FlxBasic>
 						createdSprite.scrollFactor.set(object.scrollFactor[0], object.scrollFactor[1]);
 					if (object.size != null)
 						createdSprite.setGraphicSize(Std.int(createdSprite.width * object.size));
+					if (object.scale != null)
+					{
+						createdSprite.scale.x = object.scale[0];
+						createdSprite.scale.y = object.scale[1];
+					}
 
 					createdSprite.flipX = object.flipX;
 					createdSprite.flipY = object.flipY;
@@ -194,8 +200,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	public function dadPosition(curStage:String, boyfriend:Character, gf:Character, dad:Character, camPos:FlxPoint):Void
 	{
-		callFunc('postCreate', [boyfriend, gf, dad, camPos]);
-		callFunc('dadPosition', [boyfriend, gf, dad, camPos]);
+		callFunc('postCreate', [boyfriend, gf, dad]);
+		callFunc('dadPosition', [boyfriend, gf, dad]);
 	}
 
 	public function repositionPlayers(curStage:String, boyfriend:Character, gf:Character, dad:Character)
@@ -233,7 +239,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	function callStageScript()
 	{
-		stageScript = new ScriptHandler(Paths.module('$curStage/$curStage', 'stages'));
+		var modulePath = Paths.module('$curStage/$curStage', 'stages');
+
+		if (!sys.FileSystem.exists(modulePath))
+			return;
+
+		stageScript = new ScriptHandler(modulePath);
 
 		/* ===== SCRIPT VARIABLES ===== */
 

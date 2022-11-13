@@ -7,7 +7,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
-import song.MusicBeat.MusicBeatSubState;
+import states.MusicBeatState.MusicBeatSubstate;
 
 /**
  *
@@ -15,7 +15,7 @@ import song.MusicBeat.MusicBeatSubState;
  * @author Shadow_Mario_
  *
 **/
-class FNFTransition extends MusicBeatSubState
+class FNFTransition extends MusicBeatSubstate
 {
 	public static var finishCallback:Void->Void;
 

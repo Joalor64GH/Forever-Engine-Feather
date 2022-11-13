@@ -1,8 +1,8 @@
 package states;
 
-import song.MusicBeat.MusicBeatSubState;
+import states.MusicBeatState.MusicBeatSubstate;
 import base.feather.ScriptHandler;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 import flixel.FlxBasic;
 import flixel.FlxSubState;
 
@@ -136,7 +136,7 @@ class ScriptableState extends MusicBeatState
 	}
 }
 
-class ScriptableSubstate extends MusicBeatSubState
+class ScriptableSubstate extends MusicBeatSubstate
 {
 	var stateScript:ScriptHandler;
 	var errorCatch:String; // string containing error information;

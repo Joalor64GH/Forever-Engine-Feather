@@ -6,9 +6,9 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import song.MusicBeat.MusicBeatSubState;
+import states.MusicBeatState.MusicBeatSubstate;
 
-class PreferenceSubstate extends MusicBeatSubState
+class PreferenceSubstate extends MusicBeatSubstate
 {
 	//
 	private var blackTopBar:FlxSprite;

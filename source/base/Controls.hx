@@ -1,4 +1,4 @@
-package base.input;
+package base;
 
 import flixel.FlxG;
 import openfl.events.KeyboardEvent;

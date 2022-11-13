@@ -8,7 +8,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.text.FlxText;
-import song.MusicBeat.MusicBeatState;
+import states.MusicBeatState;
 
 using StringTools;
 
@@ -102,6 +102,7 @@ class MainMenu extends MusicBeatState
 		mainScript.set('this', this);
 		mainScript.set('menuCam', menuCam);
 		mainScript.set('menuHUD', menuHUD);
+		mainScript.set('NewOptions', states.menus.NewOptions);
 
 		super.create();
 

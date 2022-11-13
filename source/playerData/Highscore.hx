@@ -1,6 +1,5 @@
 package playerData;
 
-import base.CoolUtil;
 import flixel.FlxG;
 
 using StringTools;

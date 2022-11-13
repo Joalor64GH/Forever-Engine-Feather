@@ -3,7 +3,6 @@ package;
 /*
 	Aw hell yeah! something I can actually work on!
  */
-import base.CoolUtil;
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;

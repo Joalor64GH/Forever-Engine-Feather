@@ -6,10 +6,9 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameObjects.Boyfriend;
 import song.Conductor;
-import song.MusicBeat.MusicBeatSubState;
-import base.input.Controls;
+import states.MusicBeatState.MusicBeatSubstate;
 
-class GameOverSubstate extends MusicBeatSubState
+class GameOverSubstate extends MusicBeatSubstate
 {
 	//
 	var bf:Boyfriend;

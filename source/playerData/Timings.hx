@@ -1,6 +1,5 @@
 package playerData;
 
-import gameObjects.*;
 import states.PlayState;
 
 /**
